@@ -89,6 +89,32 @@ button{
 
 
 /* ==========================================================
+   🌊 PAGE TRANSITION
+========================================================== */
+
+#pageTransition{
+ position:fixed;
+ inset:0;
+ background:
+  radial-gradient(circle at 30% 30%,#ffe5ef,transparent 35%),
+  radial-gradient(circle at 70% 70%,#eee5ff,transparent 35%),
+  var(--bg);
+ z-index:9999;
+ pointer-events:none;
+ opacity:0;
+ transform:scale(1.08);
+ transition:
+  opacity .45s ease,
+  transform .55s cubic-bezier(.2,.8,.2,1);
+}
+
+#pageTransition.active{
+ opacity:1;
+ transform:scale(1);
+}
+
+
+/* ==========================================================
    NAVIGATION
 ========================================================== */
 
@@ -116,11 +142,13 @@ button{
  color:var(--muted);
  cursor:pointer;
  font-size:12px;
+ transition:.2s;
 }
 
 #topbar button:hover{
  background:white;
  color:var(--text);
+ transform:translateY(-2px);
 }
 
 
@@ -231,10 +259,15 @@ section{
  padding:12px 18px;
  cursor:pointer;
  transition:.25s;
+ -webkit-tap-highlight-color:transparent;
 }
 
 .btn:hover{
  transform:translateY(-3px);
+}
+
+.btn:active{
+ transform:scale(.96);
 }
 
 .pink{
@@ -373,10 +406,15 @@ section{
  padding:10px 13px;
  cursor:pointer;
  transition:.2s;
+ -webkit-tap-highlight-color:transparent;
 }
 
 .mood-buttons button:hover{
  transform:translateY(-2px);
+}
+
+.mood-buttons button:active{
+ transform:scale(.96);
 }
 
 #moodResult{
@@ -412,10 +450,58 @@ section{
  transform:rotate(-6deg) scale(1.06);
 }
 
+.gift:active{
+ transform:scale(.94);
+}
+
 #surpriseText{
  min-height:25px;
  color:var(--muted);
  margin:17px 0;
+}
+
+
+/* ==========================================================
+   ✨ MAGIC INTERACTION
+========================================================== */
+
+.magic-card{
+ max-width:600px;
+ margin:auto;
+ padding:30px;
+ text-align:center;
+ border-radius:var(--r);
+ cursor:pointer;
+ transition:.35s;
+}
+
+.magic-card:hover{
+ transform:translateY(-7px) rotate(.4deg);
+ box-shadow:0 30px 70px rgba(92,56,87,.18);
+}
+
+.magic-card:active{
+ transform:scale(.98);
+}
+
+.magic-orb{
+ width:80px;
+ height:80px;
+ margin:auto;
+ border-radius:50%;
+ display:grid;
+ place-items:center;
+ font-size:35px;
+ background:linear-gradient(135deg,var(--pink),var(--lav));
+ box-shadow:0 12px 35px #d78bad44;
+ animation:orbPulse 2s infinite;
+}
+
+@keyframes orbPulse{
+ 50%{
+  transform:scale(1.08);
+  box-shadow:0 18px 45px #d78bad55;
+ }
 }
 
 
@@ -552,11 +638,16 @@ section{
  cursor:pointer;
  text-align:left;
  transition:.2s;
+ -webkit-tap-highlight-color:transparent;
 }
 
 .answer:hover:not(:disabled){
  transform:translateY(-2px);
  box-shadow:0 8px 20px rgba(80,50,80,.08);
+}
+
+.answer:active:not(:disabled){
+ transform:scale(.98);
 }
 
 .answer:disabled{
@@ -604,38 +695,6 @@ section{
 .quiz-result p{
  color:var(--muted);
  margin:0 0 22px;
-}
-
-
-/* ==========================================================
-   FOOTER
-========================================================== */
-
-footer{
- text-align:center;
- color:var(--muted);
- font-size:11px;
- padding:40px 0 70px;
-}
-
-
-/* ==========================================================
-   ORIGINAL FLOATING HEARTS
-========================================================== */
-
-.float{
- position:fixed;
- pointer-events:none;
- z-index:40;
- font-size:20px;
- animation:up 1.5s ease forwards;
-}
-
-@keyframes up{
- to{
-  opacity:0;
-  transform:translateY(-150px) rotate(25deg) scale(1.3);
- }
 }
 
 
@@ -737,6 +796,93 @@ footer{
 
 
 /* ==========================================================
+   🐻 FLOATING CUTE CHARACTERS
+========================================================== */
+
+.floating-character{
+ position:fixed;
+ pointer-events:none;
+ z-index:4;
+ font-size:28px;
+ animation:characterFloat linear forwards;
+ filter:drop-shadow(0 5px 10px rgba(80,50,80,.12));
+}
+
+@keyframes characterFloat{
+
+ 0%{
+  opacity:0;
+  transform:translateY(30px) rotate(-10deg) scale(.7);
+ }
+
+ 10%{
+  opacity:.9;
+ }
+
+ 50%{
+  transform:translateY(-45vh) rotate(8deg) scale(1);
+ }
+
+ 100%{
+  opacity:0;
+  transform:translateY(-110vh) rotate(-12deg) scale(.8);
+ }
+}
+
+
+/* ==========================================================
+   🎉 CONFETTI
+========================================================== */
+
+.confetti{
+ position:fixed;
+ top:-20px;
+ width:9px;
+ height:14px;
+ z-index:999;
+ pointer-events:none;
+ animation:confettiFall linear forwards;
+}
+
+@keyframes confettiFall{
+
+ 0%{
+  opacity:1;
+  transform:translateY(0) rotate(0deg);
+ }
+
+ 100%{
+  opacity:0;
+  transform:
+   translateY(110vh)
+   translateX(var(--drift))
+   rotate(720deg);
+ }
+}
+
+
+/* ==========================================================
+   ⌨️ TYPING CURSOR
+========================================================== */
+
+.typing-cursor{
+ display:inline-block;
+ width:2px;
+ height:1em;
+ margin-left:3px;
+ vertical-align:-2px;
+ background:var(--pink);
+ animation:blink .7s infinite;
+}
+
+@keyframes blink{
+ 50%{
+  opacity:0;
+ }
+}
+
+
+/* ==========================================================
    MODAL
 ========================================================== */
 
@@ -785,17 +931,79 @@ footer{
 
 
 /* ==========================================================
+   FOOTER
+========================================================== */
+
+footer{
+ text-align:center;
+ color:var(--muted);
+ font-size:11px;
+ padding:40px 0 70px;
+}
+
+
+/* ==========================================================
+   ORIGINAL FLOATING HEARTS
+========================================================== */
+
+.float{
+ position:fixed;
+ pointer-events:none;
+ z-index:40;
+ font-size:20px;
+ animation:up 1.5s ease forwards;
+}
+
+@keyframes up{
+
+ to{
+  opacity:0;
+  transform:
+   translateY(-150px)
+   rotate(25deg)
+   scale(1.3);
+ }
+}
+
+
+/* ==========================================================
    MOBILE
 ========================================================== */
 
 @media(max-width:650px){
 
+ #topbar{
+  top:auto;
+  bottom:12px;
+  width:calc(100% - 20px);
+  justify-content:center;
+  padding:5px;
+  z-index:100;
+ }
+
  #topbar button{
-  padding:8px 9px;
+  flex:1;
+  padding:10px 5px;
+  font-size:11px;
+ }
+
+ .hero{
+  min-height:92svh;
+  padding-bottom:70px;
+ }
+
+ h1{
+  font-size:clamp(58px,19vw,90px);
+ }
+
+ .hero p{
+  max-width:300px;
+  line-height:1.6;
  }
 
  .polaroids{
   grid-template-columns:1fr 1fr;
+  gap:12px;
  }
 
  .polaroid:nth-child(2){
@@ -809,7 +1017,7 @@ footer{
  }
 
  section{
-  padding:65px 0;
+  padding:70px 0;
  }
 
  .message{
@@ -831,6 +1039,47 @@ footer{
  .sparkle{
   font-size:12px;
  }
+
+ .floating-character{
+  font-size:23px;
+ }
+
+ .cursor-heart{
+  display:none;
+ }
+
+ .magic-card{
+  padding:25px 18px;
+  border-radius:24px;
+ }
+
+ .message,
+ .mood,
+ .surprise,
+ .quiz,
+ .note,
+ .music{
+  border-radius:24px;
+ }
+
+}
+
+
+/* ==========================================================
+   ACCESSIBILITY
+========================================================== */
+
+@media(prefers-reduced-motion:reduce){
+
+ *,
+ *::before,
+ *::after{
+  animation-duration:.01ms!important;
+  animation-iteration-count:1!important;
+  scroll-behavior:auto!important;
+  transition-duration:.01ms!important;
+ }
+
 }
 
 </style>
@@ -838,6 +1087,13 @@ footer{
 
 
 <body>
+
+
+<!-- ==========================================================
+     PAGE TRANSITION
+========================================================== -->
+
+<div id="pageTransition"></div>
 
 
 <!-- ==========================================================
@@ -1063,6 +1319,54 @@ footer{
 
 
 <!-- ==========================================================
+     MAGIC INTERACTION
+========================================================== -->
+
+<section id="magic">
+
+ <div class="wrap">
+
+  <div class="title">
+
+   <h2>
+    one little thing
+   </h2>
+
+   <p>
+    tap it. something cute might happen.
+   </p>
+
+  </div>
+
+
+  <div
+   class="magic-card glass"
+   onclick="magicMoment()">
+
+   <div class="magic-orb">
+    ✨
+   </div>
+
+   <h3 id="magicTitle">
+    tap the magic
+   </h3>
+
+   <p
+    id="magicText"
+    style="color:var(--muted);line-height:1.7">
+
+    Nothing suspicious here... probably. 👀
+
+   </p>
+
+  </div>
+
+ </div>
+
+</section>
+
+
+<!-- ==========================================================
      SURPRISE
 ========================================================== -->
 
@@ -1231,7 +1535,6 @@ footer{
 
   </div>
 
-
   <audio id="audio" loop>
 
    <source
@@ -1342,7 +1645,7 @@ const CUSTOM={
  "You make ordinary days a little more fun. That's it. That's the message.",
 
  secretMessage:
- "And yes... you're stuck with this friendship. ♡",
+ "And yes... secret message — ********(Still not the right time 👀)♡",
 
  songTitle:
  "Baby ♡",
@@ -1388,16 +1691,16 @@ const CUSTOM={
 
   {
    question:
-   "Who is more likely to start a random argument? 😂",
+   "What's my favourite movie?💀",
 
    answers:[
-    "Me",
-    "You",
-    "Both of us",
-    "Nobody"
+    "The Conjuring",
+    "Harry Potter",
+    "Sinister",
+    "Hocus Pocus"
    ],
 
-   correct:2
+   correct:1
   },
 
 
@@ -1433,13 +1736,13 @@ const CUSTOM={
 
   {
    question:
-   "What's the correct answer to every question?",
+   "Who we are?👀",
 
    answers:[
-    "Maybe",
-    "No idea",
-    "Obviously me",
-    "42"
+    "Friends",
+    "Siblings",
+    "Just Friends 😂",
+    "Ofc Friends 👀"
    ],
 
    correct:2
@@ -1495,9 +1798,6 @@ document.getElementById("name").textContent =
 
 document.getElementById("foot").textContent =
  CUSTOM.name;
-
-document.getElementById("subtitle").textContent =
- CUSTOM.subtitle;
 
 document.getElementById("mainMessage").textContent =
  CUSTOM.mainMessage;
@@ -1557,16 +1857,81 @@ setTimeout(()=>{
 
 
 /* ==========================================================
-   NAVIGATION
+   ⌨️ TYPING ANIMATION
+========================================================== */
+
+function typeText(element,text,speed=40){
+
+ element.innerHTML="";
+
+ const cursor=
+  document.createElement("span");
+
+ cursor.className="typing-cursor";
+
+ element.appendChild(cursor);
+
+ let i=0;
+
+ function type(){
+
+  if(i<text.length){
+
+   cursor.before(
+    document.createTextNode(text.charAt(i))
+   );
+
+   i++;
+
+   setTimeout(type,speed);
+
+  }
+
+ }
+
+ type();
+
+}
+
+typeText(
+ document.getElementById("subtitle"),
+ CUSTOM.subtitle,
+ 35
+);
+
+
+/* ==========================================================
+   🌊 SMOOTH PAGE TRANSITION NAVIGATION
 ========================================================== */
 
 function go(id){
 
- document
-  .getElementById(id)
-  .scrollIntoView({
-   behavior:"smooth"
-  });
+ const transition=
+  document.getElementById("pageTransition");
+
+ transition.classList.add("active");
+
+ setTimeout(()=>{
+
+  const target=
+   document.getElementById(id);
+
+  if(target){
+
+   target.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+   });
+
+  }
+
+ },220);
+
+ setTimeout(()=>{
+
+  transition.classList.remove("active");
+
+ },700);
 
 }
 
@@ -1629,6 +1994,60 @@ function mood(type){
   .textContent=m[type];
 
  hearts();
+
+}
+
+
+/* ==========================================================
+   ✨ MAGIC INTERACTION
+========================================================== */
+
+const magicMessages=[
+
+ [
+  "A wild Junhii appeared! 🐻",
+  "Friendship level increased by +100."
+ ],
+
+ [
+  "You found the secret button. 👀",
+  "Unfortunately, it does absolutely nothing... except this. ✨"
+ ],
+
+ [
+  "Emergency happiness activated! 💗",
+  "Please accept these virtual sparkles."
+ ],
+
+ [
+  "Breaking news! 🚨",
+  "This website has officially become 37% cuter."
+ ],
+
+ [
+  "Achievement unlocked 🏆",
+  "You clicked a completely unnecessary button."
+ ]
+
+];
+
+
+function magicMoment(){
+
+ const message=
+  magicMessages[
+   Math.floor(Math.random()*magicMessages.length)
+  ];
+
+ document.getElementById("magicTitle")
+  .textContent=message[0];
+
+ document.getElementById("magicText")
+  .textContent=message[1];
+
+ hearts();
+
+ createConfetti();
 
 }
 
@@ -1711,9 +2130,6 @@ function createFallingHeart(){
 
 }
 
-
-/* Start falling hearts */
-
 setInterval(
  createFallingHeart,
  700
@@ -1750,9 +2166,6 @@ function createSparkle(){
 
 }
 
-
-/* Start sparkles */
-
 setInterval(
  createSparkle,
  900
@@ -1760,13 +2173,59 @@ setInterval(
 
 
 /* ==========================================================
-   🖱️ CUTE CURSOR TRAIL
+   🐻 FLOATING CUTE CHARACTERS
 ========================================================== */
 
-/*
-   Only enable this on devices that actually
-   have a mouse/trackpad.
-*/
+function createFloatingCharacter(){
+
+ const characters=[
+  "🐻",
+  "🐰",
+  "🐱",
+  "🧸",
+  "🌸",
+  "💗",
+  "🎀",
+  "☁️"
+ ];
+
+ const character=
+  document.createElement("span");
+
+ character.className=
+  "floating-character";
+
+ character.textContent=
+  characters[
+   Math.floor(Math.random()*characters.length)
+  ];
+
+ character.style.left=
+  Math.random()*100+"vw";
+
+ character.style.bottom=
+  "-40px";
+
+ character.style.animationDuration=
+  (7+Math.random()*5)+"s";
+
+ document.body.appendChild(character);
+
+ setTimeout(()=>{
+  character.remove();
+ },13000);
+
+}
+
+setInterval(
+ createFloatingCharacter,
+ 3500
+);
+
+
+/* ==========================================================
+   🖱️ CUTE CURSOR TRAIL
+========================================================== */
 
 if(
  window.matchMedia("(hover: hover) and (pointer: fine)").matches
@@ -1779,10 +2238,6 @@ if(
   (e)=>{
 
    const now=Date.now();
-
-   /*
-      Prevent creating too many elements.
-   */
 
    if(now-lastCursorTime<80)
     return;
@@ -1817,6 +2272,51 @@ if(
 
   }
  );
+
+}
+
+
+/* ==========================================================
+   🎉 CONFETTI
+========================================================== */
+
+function createConfetti(){
+
+ const pieces=45;
+
+ for(let i=0;i<pieces;i++){
+
+  const c=
+   document.createElement("span");
+
+  c.className="confetti";
+
+  c.style.left=
+   Math.random()*100+"vw";
+
+  c.style.setProperty(
+   "--drift",
+   (Math.random()*240-120)+"px"
+  );
+
+  c.style.animationDuration=
+   (2+Math.random()*2)+"s";
+
+  c.style.animationDelay=
+   Math.random()*.4+"s";
+
+  c.style.borderRadius=
+   Math.random()>.5
+    ? "50%"
+    : "2px";
+
+  document.body.appendChild(c);
+
+  setTimeout(()=>{
+   c.remove();
+  },4500);
+
+ }
 
 }
 
@@ -2032,6 +2532,12 @@ function showQuizResult(){
 
 
  hearts();
+
+ createConfetti();
+
+ setTimeout(()=>{
+  createConfetti();
+ },500);
 
 }
 
