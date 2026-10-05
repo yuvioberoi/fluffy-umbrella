@@ -3,21 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#fff8fc">
+<meta name="theme-color" content="#fff8f8">
+
 <title>For Junhii ♡</title>
 
 <style>
 
 :root{
- --bg:#fff9fc;
- --text:#302833;
- --muted:#8b7d88;
- --pink:#e994b4;
- --lav:#aa98df;
- --card:rgba(255,255,255,.68);
- --line:rgba(80,45,75,.11);
- --shadow:0 24px 70px rgba(92,56,87,.13);
- --r:30px;
+ --bg:#fff8f8;
+ --text:#241f27;
+ --muted:#817780;
+
+ --red:#e63950;
+ --red2:#ff6b7d;
+
+ --blue:#3d73e8;
+ --blue2:#6f9cff;
+
+ --card:rgba(255,255,255,.72);
+ --line:rgba(40,50,100,.12);
+
+ --shadow:0 24px 70px rgba(40,50,100,.13);
+
+ --r:28px;
 }
 
 *{
@@ -31,16 +39,24 @@ html{
 body{
  margin:0;
  font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+
  color:var(--text);
+
  background:
- radial-gradient(circle at 12% 8%,#ffe5ef 0,transparent 27%),
- radial-gradient(circle at 88% 15%,#eee5ff 0,transparent 28%),
+ radial-gradient(circle at 10% 8%,#ffe0e5 0,transparent 27%),
+ radial-gradient(circle at 90% 15%,#dfeaff 0,transparent 30%),
  var(--bg);
+
  overflow-x:hidden;
 }
 
-button{
+button,
+textarea{
  font:inherit;
+}
+
+button{
+ -webkit-tap-highlight-color:transparent;
 }
 
 .wrap{
@@ -51,7 +67,9 @@ button{
 .glass{
  background:var(--card);
  border:1px solid var(--line);
+
  box-shadow:var(--shadow);
+
  backdrop-filter:blur(20px);
  -webkit-backdrop-filter:blur(20px);
 }
@@ -65,9 +83,11 @@ button{
  position:fixed;
  inset:0;
  background:var(--bg);
- z-index:100;
+ z-index:1000;
+
  display:grid;
  place-items:center;
+
  transition:.8s;
 }
 
@@ -77,32 +97,51 @@ button{
 }
 
 .loader-heart{
- font-size:38px;
+ font-size:40px;
+
+ background:linear-gradient(
+  135deg,
+  var(--red),
+  var(--blue)
+ );
+
+ -webkit-background-clip:text;
+ background-clip:text;
+ color:transparent;
+
  animation:pulse 1s infinite;
 }
 
 @keyframes pulse{
+
  50%{
   transform:scale(1.18);
  }
+
 }
 
 
 /* ==========================================================
-   🌊 PAGE TRANSITION
+   PAGE TRANSITION
 ========================================================== */
 
 #pageTransition{
  position:fixed;
  inset:0;
+
  background:
-  radial-gradient(circle at 30% 30%,#ffe5ef,transparent 35%),
-  radial-gradient(circle at 70% 70%,#eee5ff,transparent 35%),
-  var(--bg);
+ radial-gradient(circle at 25% 30%,#ffdfe5,transparent 35%),
+ radial-gradient(circle at 75% 70%,#dce7ff,transparent 35%),
+ var(--bg);
+
  z-index:9999;
+
  pointer-events:none;
+
  opacity:0;
+
  transform:scale(1.08);
+
  transition:
   opacity .45s ease,
   transform .55s cubic-bezier(.2,.8,.2,1);
@@ -115,39 +154,58 @@ button{
 
 
 /* ==========================================================
-   NAVIGATION
+   NAV
 ========================================================== */
 
 #topbar{
  position:fixed;
+
  top:15px;
  left:50%;
+
  transform:translateX(-50%);
+
  z-index:50;
+
  display:flex;
- gap:6px;
+ gap:5px;
+
  padding:6px;
+
  border:1px solid var(--line);
- background:rgba(255,255,255,.58);
+
+ background:rgba(255,255,255,.62);
+
  backdrop-filter:blur(16px);
+
  border-radius:999px;
- box-shadow:0 10px 30px rgba(80,50,80,.08);
+
+ box-shadow:0 10px 30px rgba(40,50,100,.1);
 }
 
 #topbar button{
  border:0;
+
  background:transparent;
+
  padding:9px 12px;
+
  border-radius:999px;
+
  color:var(--muted);
+
  cursor:pointer;
+
  font-size:12px;
+
  transition:.2s;
 }
 
 #topbar button:hover{
  background:white;
+
  color:var(--text);
+
  transform:translateY(-2px);
 }
 
@@ -158,10 +216,14 @@ button{
 
 .hero{
  min-height:100svh;
+
  display:grid;
  place-items:center;
+
  text-align:center;
+
  padding:70px 0 30px;
+
  position:relative;
 }
 
@@ -171,55 +233,80 @@ button{
 
 .pill{
  display:inline-block;
+
  padding:8px 13px;
+
  border:1px solid var(--line);
+
  border-radius:999px;
+
  background:rgba(255,255,255,.55);
+
  font-size:12px;
+
  color:var(--muted);
 }
 
 h1{
  font-size:clamp(62px,14vw,125px);
+
  line-height:.84;
+
  letter-spacing:-.075em;
+
  margin:27px 0 18px;
 }
 
 .grad{
- background:linear-gradient(110deg,var(--pink),var(--lav));
+ background:
+ linear-gradient(
+  110deg,
+  var(--red),
+  var(--blue)
+ );
+
  -webkit-background-clip:text;
  background-clip:text;
+
  color:transparent;
 }
 
 .hero p{
  color:var(--muted);
+
  font-size:15px;
+
  margin:0 auto 28px;
 }
 
 .arrow{
  font-size:20px;
+
  animation:bob 1.7s infinite;
- color:var(--pink);
+
+ color:var(--red);
 }
 
 @keyframes rise{
+
  from{
   opacity:0;
   transform:translateY(25px);
  }
+
  to{
   opacity:1;
   transform:none;
  }
+
 }
 
 @keyframes bob{
+
  50%{
   transform:translateY(7px);
  }
+
 }
 
 
@@ -238,13 +325,17 @@ section{
 
 .title h2{
  font-size:29px;
+
  letter-spacing:-.045em;
+
  margin:0 0 7px;
 }
 
 .title p{
  font-size:13px;
+
  color:var(--muted);
+
  margin:0;
 }
 
@@ -255,11 +346,14 @@ section{
 
 .btn{
  border:0;
+
  border-radius:999px;
+
  padding:12px 18px;
+
  cursor:pointer;
+
  transition:.25s;
- -webkit-tap-highlight-color:transparent;
 }
 
 .btn:hover{
@@ -272,13 +366,23 @@ section{
 
 .pink{
  color:white;
- background:linear-gradient(135deg,var(--pink),var(--lav));
- box-shadow:0 12px 28px #d78bad33;
+
+ background:
+ linear-gradient(
+  135deg,
+  var(--red),
+  var(--blue)
+ );
+
+ box-shadow:
+ 0 12px 28px rgba(61,115,232,.22);
 }
 
 .soft{
  background:#fff;
+
  border:1px solid var(--line);
+
  color:var(--text);
 }
 
@@ -289,9 +393,13 @@ section{
 
 .message{
  max-width:650px;
+
  margin:auto;
+
  padding:34px;
+
  text-align:center;
+
  border-radius:var(--r);
 }
 
@@ -301,7 +409,9 @@ section{
 
 .message p{
  line-height:1.8;
+
  color:#665967;
+
  margin:15px 0;
 }
 
@@ -311,71 +421,293 @@ section{
 
 .show{
  display:block!important;
+
  animation:pop .5s both;
 }
 
 @keyframes pop{
+
  from{
   opacity:0;
   transform:scale(.96) translateY(8px);
  }
+
  to{
   opacity:1;
   transform:none;
  }
+
 }
 
 
 /* ==========================================================
-   POLAROIDS
+   💌 LETTER
 ========================================================== */
 
-.polaroids{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:18px;
- align-items:center;
+.letter-wrap{
+ max-width:650px;
+ margin:auto;
+ text-align:center;
 }
 
-.polaroid{
- background:#fff;
- padding:9px 9px 22px;
- border-radius:5px;
- box-shadow:0 14px 30px #65475b18;
- cursor:pointer;
- transition:.35s;
+.envelope{
+ width:150px;
+ height:105px;
+
+ margin:20px auto;
+
  position:relative;
+
+ cursor:pointer;
+
+ perspective:800px;
 }
 
-.polaroid:nth-child(1){
- transform:rotate(-3deg);
+.envelope-body{
+ position:absolute;
+ inset:0;
+
+ background:
+ linear-gradient(
+  135deg,
+  var(--red),
+  var(--blue)
+ );
+
+ border-radius:12px;
+
+ box-shadow:
+ 0 18px 40px rgba(61,115,232,.22);
 }
 
-.polaroid:nth-child(2){
- transform:translateY(-12px) rotate(2deg);
-}
+.envelope-flap{
+ position:absolute;
 
-.polaroid:nth-child(3){
- transform:rotate(-2deg);
-}
+ top:0;
+ left:0;
 
-.polaroid:hover{
- transform:translateY(-12px) rotate(0) scale(1.035);
+ width:0;
+ height:0;
+
+ border-left:75px solid transparent;
+ border-right:75px solid transparent;
+
+ border-top:55px solid #ff7180;
+
+ transform-origin:top;
+
+ transition:.6s;
+
  z-index:2;
 }
 
-.polaroid img{
+.envelope.open .envelope-flap{
+ transform:rotateX(180deg);
+}
+
+.letter-paper{
+ display:none;
+
+ max-width:600px;
+
+ margin:25px auto 0;
+
+ padding:30px;
+
+ border-radius:24px;
+
+ background:#fff;
+
+ border:1px solid var(--line);
+
+ box-shadow:var(--shadow);
+
+ text-align:left;
+
+ line-height:1.8;
+}
+
+.letter-paper.show{
+ display:block;
+ animation:pop .6s both;
+}
+
+.letter-paper h3{
+ margin-top:0;
+
+ background:
+ linear-gradient(
+  100deg,
+  var(--red),
+  var(--blue)
+ );
+
+ -webkit-background-clip:text;
+ background-clip:text;
+ color:transparent;
+}
+
+
+/* ==========================================================
+   📅 TIMELINE
+========================================================== */
+
+.timeline{
+ max-width:680px;
+
+ margin:auto;
+
+ position:relative;
+}
+
+.timeline::before{
+ content:"";
+
+ position:absolute;
+
+ left:19px;
+
+ top:0;
+ bottom:0;
+
+ width:2px;
+
+ background:
+ linear-gradient(
+  var(--red),
+  var(--blue)
+ );
+}
+
+.timeline-item{
+ position:relative;
+
+ padding-left:60px;
+
+ margin-bottom:28px;
+}
+
+.timeline-dot{
+ position:absolute;
+
+ left:8px;
+ top:5px;
+
+ width:23px;
+ height:23px;
+
+ border-radius:50%;
+
+ background:
+ linear-gradient(
+  135deg,
+  var(--red),
+  var(--blue)
+ );
+
+ border:4px solid var(--bg);
+
+ box-shadow:0 5px 15px rgba(61,115,232,.2);
+}
+
+.timeline-card{
+ padding:20px;
+
+ border-radius:22px;
+}
+
+.timeline-card small{
+ color:var(--red);
+
+ font-weight:700;
+}
+
+.timeline-card h3{
+ margin:6px 0;
+}
+
+.timeline-card p{
+ color:var(--muted);
+
+ line-height:1.6;
+
+ margin:0;
+}
+
+
+/* ==========================================================
+   🖼️ MEMORY GALLERY
+========================================================== */
+
+.gallery{
+ display:flex;
+
+ gap:18px;
+
+ overflow-x:auto;
+
+ padding:15px 5px 25px;
+
+ scroll-snap-type:x mandatory;
+
+ scrollbar-width:none;
+}
+
+.gallery::-webkit-scrollbar{
+ display:none;
+}
+
+.gallery-card{
+ min-width:280px;
+
+ scroll-snap-align:center;
+
+ background:#fff;
+
+ padding:10px 10px 18px;
+
+ border-radius:16px;
+
+ box-shadow:
+ 0 14px 35px rgba(40,50,100,.13);
+
+ cursor:pointer;
+
+ transition:.3s;
+}
+
+.gallery-card:hover{
+ transform:translateY(-7px);
+}
+
+.gallery-card img{
  width:100%;
+
  aspect-ratio:1;
+
  object-fit:cover;
+
+ border-radius:10px;
+
  display:block;
 }
 
-.caption{
+.gallery-caption{
  text-align:center;
+
+ font-size:13px;
+
+ color:var(--muted);
+
+ margin-top:12px;
+}
+
+.gallery-hint{
+ text-align:center;
+
+ color:var(--muted);
+
  font-size:12px;
- margin-top:11px;
- color:#776977;
 }
 
 
@@ -385,41 +717,265 @@ section{
 
 .mood{
  max-width:600px;
+
  margin:auto;
+
  padding:27px;
+
  border-radius:var(--r);
+
  text-align:center;
 }
 
 .mood-buttons{
  display:flex;
+
  justify-content:center;
+
  gap:8px;
+
  flex-wrap:wrap;
+
  margin:20px 0;
 }
 
 .mood-buttons button{
  border:1px solid var(--line);
+
  background:#fff;
+
  border-radius:999px;
+
  padding:10px 13px;
+
  cursor:pointer;
+
  transition:.2s;
- -webkit-tap-highlight-color:transparent;
 }
 
 .mood-buttons button:hover{
  transform:translateY(-2px);
 }
 
-.mood-buttons button:active{
- transform:scale(.96);
-}
-
 #moodResult{
  min-height:25px;
+
  color:var(--muted);
+}
+
+
+/* ==========================================================
+   JUNHII OS
+========================================================== */
+
+.os{
+ max-width:700px;
+
+ margin:auto;
+
+ padding:14px;
+
+ border-radius:25px;
+
+ background:
+ linear-gradient(
+  135deg,
+  rgba(230,57,80,.08),
+  rgba(61,115,232,.1)
+ );
+
+ border:1px solid var(--line);
+
+ box-shadow:var(--shadow);
+}
+
+.os-window{
+ background:#fff;
+
+ border-radius:18px;
+
+ overflow:hidden;
+}
+
+.os-top{
+ padding:12px 15px;
+
+ display:flex;
+
+ align-items:center;
+
+ gap:8px;
+
+ border-bottom:1px solid var(--line);
+
+ background:#fafafa;
+}
+
+.os-dot{
+ width:9px;
+ height:9px;
+
+ border-radius:50%;
+}
+
+.os-dot.red{
+ background:var(--red);
+}
+
+.os-dot.blue{
+ background:var(--blue);
+}
+
+.os-title{
+ margin-left:5px;
+
+ font-size:12px;
+
+ color:var(--muted);
+}
+
+.os-content{
+ padding:22px;
+}
+
+.os-status{
+ display:grid;
+
+ grid-template-columns:
+ repeat(3,1fr);
+
+ gap:10px;
+
+ margin-bottom:18px;
+}
+
+.os-stat{
+ padding:15px;
+
+ border-radius:17px;
+
+ background:#f8f8fb;
+
+ text-align:center;
+}
+
+.os-stat b{
+ display:block;
+
+ font-size:18px;
+}
+
+.os-stat small{
+ color:var(--muted);
+}
+
+.os-apps{
+ display:grid;
+
+ grid-template-columns:
+ repeat(4,1fr);
+
+ gap:10px;
+}
+
+.os-app{
+ border:1px solid var(--line);
+
+ background:#fff;
+
+ padding:17px 8px;
+
+ border-radius:17px;
+
+ cursor:pointer;
+
+ text-align:center;
+
+ transition:.25s;
+}
+
+.os-app:hover{
+ transform:translateY(-4px);
+
+ box-shadow:
+ 0 10px 25px rgba(40,50,100,.1);
+}
+
+.os-app span{
+ display:block;
+
+ font-size:25px;
+
+ margin-bottom:6px;
+}
+
+.os-app small{
+ color:var(--muted);
+}
+
+
+/* ==========================================================
+   MAGIC
+========================================================== */
+
+.magic-card{
+ max-width:600px;
+
+ margin:auto;
+
+ padding:30px;
+
+ text-align:center;
+
+ border-radius:var(--r);
+
+ cursor:pointer;
+
+ transition:.35s;
+}
+
+.magic-card:hover{
+ transform:translateY(-7px);
+
+ box-shadow:
+ 0 30px 70px rgba(40,50,100,.18);
+}
+
+.magic-orb{
+ width:80px;
+ height:80px;
+
+ margin:auto;
+
+ border-radius:50%;
+
+ display:grid;
+
+ place-items:center;
+
+ font-size:35px;
+
+ background:
+ linear-gradient(
+  135deg,
+  var(--red),
+  var(--blue)
+ );
+
+ color:white;
+
+ box-shadow:
+ 0 12px 35px rgba(61,115,232,.3);
+
+ animation:orbPulse 2s infinite;
+}
+
+@keyframes orbPulse{
+
+ 50%{
+  transform:scale(1.08);
+ }
+
 }
 
 
@@ -429,20 +985,30 @@ section{
 
 .surprise{
  max-width:520px;
+
  margin:auto;
+
  padding:34px;
+
  text-align:center;
+
  border-radius:var(--r);
 }
 
 .gift{
  width:82px;
  height:82px;
+
  border:1px solid var(--line);
+
  border-radius:25px;
+
  background:#fff;
+
  font-size:38px;
+
  cursor:pointer;
+
  transition:.35s;
 }
 
@@ -450,140 +1016,106 @@ section{
  transform:rotate(-6deg) scale(1.06);
 }
 
-.gift:active{
- transform:scale(.94);
-}
-
 #surpriseText{
  min-height:25px;
+
  color:var(--muted);
+
  margin:17px 0;
 }
 
 
 /* ==========================================================
-   ✨ MAGIC INTERACTION
+   🎮 MINI GAME
 ========================================================== */
 
-.magic-card{
- max-width:600px;
+.game{
+ max-width:700px;
+
  margin:auto;
- padding:30px;
- text-align:center;
+
+ padding:20px;
+
  border-radius:var(--r);
- cursor:pointer;
- transition:.35s;
 }
 
-.magic-card:hover{
- transform:translateY(-7px) rotate(.4deg);
- box-shadow:0 30px 70px rgba(92,56,87,.18);
-}
-
-.magic-card:active{
- transform:scale(.98);
-}
-
-.magic-orb{
- width:80px;
- height:80px;
- margin:auto;
- border-radius:50%;
- display:grid;
- place-items:center;
- font-size:35px;
- background:linear-gradient(135deg,var(--pink),var(--lav));
- box-shadow:0 12px 35px #d78bad44;
- animation:orbPulse 2s infinite;
-}
-
-@keyframes orbPulse{
- 50%{
-  transform:scale(1.08);
-  box-shadow:0 18px 45px #d78bad55;
- }
-}
-
-
-/* ==========================================================
-   MUSIC
-========================================================== */
-
-.music{
- max-width:520px;
- margin:auto;
- padding:17px;
- border-radius:25px;
+.game-info{
  display:flex;
+
+ justify-content:space-between;
+
  align-items:center;
- gap:14px;
-}
 
-.album{
- width:55px;
- height:55px;
- border-radius:17px;
- display:grid;
- place-items:center;
- color:#fff;
- background:linear-gradient(135deg,var(--pink),var(--lav));
- font-size:23px;
-}
+ margin-bottom:12px;
 
-.track{
- flex:1;
-}
+ font-size:13px;
 
-.track b{
- display:block;
- font-size:14px;
-}
-
-.track small{
  color:var(--muted);
 }
 
-.play{
- width:46px;
- height:46px;
- border:0;
- border-radius:50%;
- background:var(--text);
- color:white;
- cursor:pointer;
+.game-score{
+ color:var(--red);
+
+ font-weight:800;
 }
 
+.game-area{
+ position:relative;
 
-/* ==========================================================
-   NOTE
-========================================================== */
+ height:400px;
 
-.note{
- max-width:580px;
- margin:auto;
- text-align:center;
- padding:30px;
- border-radius:var(--r);
-}
+ overflow:hidden;
 
-.note textarea{
- width:100%;
- min-height:120px;
+ border-radius:22px;
+
+ background:
+ radial-gradient(circle at 20% 20%,#ffe1e5,transparent 35%),
+ radial-gradient(circle at 80% 80%,#dce7ff,transparent 35%),
+ #f8f9ff;
+
  border:1px solid var(--line);
- border-radius:20px;
- padding:16px;
- resize:vertical;
- font:inherit;
- color:var(--text);
- background:#fff;
- outline:none;
+
+ touch-action:none;
 }
 
-.note small{
- display:block;
- text-align:left;
+.game-heart{
+ position:absolute;
+
+ border:0;
+
+ background:none;
+
+ font-size:30px;
+
+ cursor:pointer;
+
+ transition:.15s;
+
+ animation:gameFloat 1.2s infinite alternate;
+}
+
+.game-heart:active{
+ transform:scale(.7);
+}
+
+@keyframes gameFloat{
+
+ from{
+  transform:translateY(0) rotate(-8deg);
+ }
+
+ to{
+  transform:translateY(-8px) rotate(8deg);
+ }
+
+}
+
+.game-message{
+ text-align:center;
+
  color:var(--muted);
- margin-top:8px;
+
+ margin:15px 0 5px;
 }
 
 
@@ -593,61 +1125,85 @@ section{
 
 .quiz{
  max-width:650px;
+
  margin:auto;
+
  padding:30px;
+
  border-radius:var(--r);
 }
 
 .quiz-progress{
  width:100%;
+
  height:8px;
+
  background:#eee7ef;
+
  border-radius:999px;
+
  overflow:hidden;
+
  margin-bottom:28px;
 }
 
 .quiz-progress span{
  display:block;
+
  height:100%;
+
  width:0;
- background:linear-gradient(90deg,var(--pink),var(--lav));
+
+ background:
+ linear-gradient(
+  90deg,
+  var(--red),
+  var(--blue)
+ );
+
  border-radius:999px;
+
  transition:.4s;
 }
 
 .quiz-question{
  font-size:21px;
+
  line-height:1.4;
+
  text-align:center;
+
  margin:20px 0;
 }
 
 .answers{
  display:grid;
+
  gap:10px;
 }
 
 .answer{
  width:100%;
+
  padding:14px 16px;
+
  border:1px solid var(--line);
+
  border-radius:18px;
+
  background:#fff;
+
  color:var(--text);
+
  cursor:pointer;
+
  text-align:left;
+
  transition:.2s;
- -webkit-tap-highlight-color:transparent;
 }
 
 .answer:hover:not(:disabled){
  transform:translateY(-2px);
- box-shadow:0 8px 20px rgba(80,50,80,.08);
-}
-
-.answer:active:not(:disabled){
- transform:scale(.98);
 }
 
 .answer:disabled{
@@ -655,22 +1211,26 @@ section{
 }
 
 .answer.correct{
- background:#e9f8ee;
- border-color:#86c999;
+ background:#eaf7ef;
+
+ border-color:#80c995;
 }
 
 .answer.wrong{
  background:#fff0f0;
+
  border-color:#e2a0a0;
 }
 
 .quiz-nav{
  text-align:center;
+
  margin-top:22px;
 }
 
 .quiz-result{
  display:none;
+
  text-align:center;
 }
 
@@ -684,63 +1244,204 @@ section{
 
 .score{
  font-size:55px;
+
  font-weight:800;
+
  margin:10px 0;
- background:linear-gradient(110deg,var(--pink),var(--lav));
+
+ background:
+ linear-gradient(
+  110deg,
+  var(--red),
+  var(--blue)
+ );
+
  -webkit-background-clip:text;
  background-clip:text;
+
  color:transparent;
 }
 
 .quiz-result p{
  color:var(--muted);
+
  margin:0 0 22px;
 }
 
 
 /* ==========================================================
-   💗 FALLING HEARTS
+   MUSIC
+========================================================== */
+
+.music{
+ max-width:520px;
+
+ margin:auto;
+
+ padding:17px;
+
+ border-radius:25px;
+
+ display:flex;
+
+ align-items:center;
+
+ gap:14px;
+}
+
+.album{
+ width:55px;
+ height:55px;
+
+ border-radius:17px;
+
+ display:grid;
+
+ place-items:center;
+
+ color:#fff;
+
+ background:
+ linear-gradient(
+  135deg,
+  var(--red),
+  var(--blue)
+ );
+
+ font-size:23px;
+}
+
+.track{
+ flex:1;
+}
+
+.track b{
+ display:block;
+
+ font-size:14px;
+}
+
+.track small{
+ color:var(--muted);
+}
+
+.play{
+ width:46px;
+ height:46px;
+
+ border:0;
+
+ border-radius:50%;
+
+ background:var(--text);
+
+ color:white;
+
+ cursor:pointer;
+}
+
+
+/* ==========================================================
+   NOTE
+========================================================== */
+
+.note{
+ max-width:580px;
+
+ margin:auto;
+
+ text-align:center;
+
+ padding:30px;
+
+ border-radius:var(--r);
+}
+
+.note textarea{
+ width:100%;
+
+ min-height:120px;
+
+ border:1px solid var(--line);
+
+ border-radius:20px;
+
+ padding:16px;
+
+ resize:vertical;
+
+ color:var(--text);
+
+ background:#fff;
+
+ outline:none;
+}
+
+.note small{
+ display:block;
+
+ text-align:left;
+
+ color:var(--muted);
+
+ margin-top:8px;
+}
+
+
+/* ==========================================================
+   EFFECTS
 ========================================================== */
 
 .falling-heart{
  position:fixed;
+
  top:-30px;
+
  pointer-events:none;
+
  z-index:5;
- color:var(--pink);
+
+ color:var(--red);
+
  font-size:18px;
- opacity:.75;
+
+ opacity:.65;
+
  animation:fallHeart linear forwards;
 }
 
 @keyframes fallHeart{
 
  0%{
-  transform:translateY(0) rotate(0deg);
+  transform:translateY(0) rotate(0);
   opacity:0;
  }
 
  10%{
-  opacity:.75;
+  opacity:.65;
  }
 
  100%{
-  transform:translateY(110vh) rotate(360deg);
+  transform:
+   translateY(110vh)
+   rotate(360deg);
+
   opacity:0;
  }
+
 }
-
-
-/* ==========================================================
-   ✨ SPARKLES
-========================================================== */
 
 .sparkle{
  position:fixed;
+
  pointer-events:none;
+
  z-index:45;
- color:var(--lav);
+
+ color:var(--blue);
+
  font-size:14px;
+
  animation:sparkleAnim 1s ease-out forwards;
 }
 
@@ -748,7 +1449,7 @@ section{
 
  0%{
   opacity:0;
-  transform:scale(.3) rotate(0deg);
+  transform:scale(.3);
  }
 
  30%{
@@ -757,24 +1458,26 @@ section{
 
  100%{
   opacity:0;
+
   transform:
    scale(1.5)
    rotate(90deg)
    translateY(-25px);
  }
+
 }
-
-
-/* ==========================================================
-   🖱️ CUTE CURSOR TRAIL
-========================================================== */
 
 .cursor-heart{
  position:fixed;
+
  pointer-events:none;
+
  z-index:99;
+
  font-size:15px;
- color:var(--pink);
+
+ color:var(--red);
+
  animation:cursorFloat .8s ease-out forwards;
 }
 
@@ -782,65 +1485,55 @@ section{
 
  0%{
   opacity:1;
-  transform:scale(1);
  }
 
  100%{
   opacity:0;
+
   transform:
    translateY(-25px)
-   scale(.3)
-   rotate(20deg);
+   scale(.3);
  }
+
 }
 
-
-/* ==========================================================
-   🐻 FLOATING CUTE CHARACTERS
-========================================================== */
-
-.floating-character{
+.float{
  position:fixed;
+
  pointer-events:none;
- z-index:4;
- font-size:28px;
- animation:characterFloat linear forwards;
- filter:drop-shadow(0 5px 10px rgba(80,50,80,.12));
+
+ z-index:40;
+
+ font-size:20px;
+
+ animation:up 1.5s ease forwards;
 }
 
-@keyframes characterFloat{
+@keyframes up{
 
- 0%{
+ to{
   opacity:0;
-  transform:translateY(30px) rotate(-10deg) scale(.7);
+
+  transform:
+   translateY(-150px)
+   rotate(25deg)
+   scale(1.3);
  }
 
- 10%{
-  opacity:.9;
- }
-
- 50%{
-  transform:translateY(-45vh) rotate(8deg) scale(1);
- }
-
- 100%{
-  opacity:0;
-  transform:translateY(-110vh) rotate(-12deg) scale(.8);
- }
 }
-
-
-/* ==========================================================
-   🎉 CONFETTI
-========================================================== */
 
 .confetti{
  position:fixed;
+
  top:-20px;
+
  width:9px;
  height:14px;
+
  z-index:999;
+
  pointer-events:none;
+
  animation:confettiFall linear forwards;
 }
 
@@ -848,37 +1541,21 @@ section{
 
  0%{
   opacity:1;
-  transform:translateY(0) rotate(0deg);
+
+  transform:
+   translateY(0)
+   rotate(0);
  }
 
  100%{
   opacity:0;
+
   transform:
    translateY(110vh)
    translateX(var(--drift))
    rotate(720deg);
  }
-}
 
-
-/* ==========================================================
-   ⌨️ TYPING CURSOR
-========================================================== */
-
-.typing-cursor{
- display:inline-block;
- width:2px;
- height:1em;
- margin-left:3px;
- vertical-align:-2px;
- background:var(--pink);
- animation:blink .7s infinite;
-}
-
-@keyframes blink{
- 50%{
-  opacity:0;
- }
 }
 
 
@@ -888,12 +1565,19 @@ section{
 
 .modal{
  display:none;
+
  position:fixed;
+
  inset:0;
- background:#241b2490;
+
+ background:#171c3290;
+
  z-index:80;
+
  place-items:center;
+
  padding:20px;
+
  backdrop-filter:blur(9px);
 }
 
@@ -903,29 +1587,44 @@ section{
 
 .modalbox{
  width:min(550px,100%);
+
  background:#fff;
+
  padding:12px;
+
  border-radius:25px;
+
  animation:pop .3s;
 }
 
 .modalbox img{
  width:100%;
+
  max-height:75vh;
+
  object-fit:contain;
+
  border-radius:18px;
 }
 
 .x{
  float:right;
+
  border:0;
- background:#f5eef4;
+
+ background:#f1f3fb;
+
  border-radius:50%;
+
  width:35px;
  height:35px;
+
  cursor:pointer;
+
  margin-bottom:-40px;
+
  position:relative;
+
  z-index:2;
 }
 
@@ -936,33 +1635,12 @@ section{
 
 footer{
  text-align:center;
+
  color:var(--muted);
+
  font-size:11px;
+
  padding:40px 0 70px;
-}
-
-
-/* ==========================================================
-   ORIGINAL FLOATING HEARTS
-========================================================== */
-
-.float{
- position:fixed;
- pointer-events:none;
- z-index:40;
- font-size:20px;
- animation:up 1.5s ease forwards;
-}
-
-@keyframes up{
-
- to{
-  opacity:0;
-  transform:
-   translateY(-150px)
-   rotate(25deg)
-   scale(1.3);
- }
 }
 
 
@@ -974,21 +1652,29 @@ footer{
 
  #topbar{
   top:auto;
+
   bottom:12px;
+
   width:calc(100% - 20px);
+
   justify-content:center;
+
   padding:5px;
+
   z-index:100;
  }
 
  #topbar button{
   flex:1;
+
   padding:10px 5px;
+
   font-size:11px;
  }
 
  .hero{
   min-height:92svh;
+
   padding-bottom:70px;
  }
 
@@ -998,22 +1684,8 @@ footer{
 
  .hero p{
   max-width:300px;
+
   line-height:1.6;
- }
-
- .polaroids{
-  grid-template-columns:1fr 1fr;
-  gap:12px;
- }
-
- .polaroid:nth-child(2){
-  transform:none;
- }
-
- .polaroid:nth-child(3){
-  grid-column:1/-1;
-  width:62%;
-  justify-self:center;
  }
 
  section{
@@ -1024,6 +1696,35 @@ footer{
   padding:27px 20px;
  }
 
+ .gallery-card{
+  min-width:78vw;
+ }
+
+ .timeline-item{
+  padding-left:50px;
+ }
+
+ .timeline::before{
+  left:14px;
+ }
+
+ .timeline-dot{
+  left:3px;
+ }
+
+ .os-status{
+  grid-template-columns:1fr 1fr;
+ }
+
+ .os-apps{
+  grid-template-columns:
+   repeat(2,1fr);
+ }
+
+ .game-area{
+  height:330px;
+ }
+
  .quiz{
   padding:22px 18px;
  }
@@ -1032,25 +1733,8 @@ footer{
   font-size:18px;
  }
 
- .falling-heart{
-  font-size:15px;
- }
-
- .sparkle{
-  font-size:12px;
- }
-
- .floating-character{
-  font-size:23px;
- }
-
  .cursor-heart{
   display:none;
- }
-
- .magic-card{
-  padding:25px 18px;
-  border-radius:24px;
  }
 
  .message,
@@ -1058,7 +1742,8 @@ footer{
  .surprise,
  .quiz,
  .note,
- .music{
+ .music,
+ .game{
   border-radius:24px;
  }
 
@@ -1066,7 +1751,7 @@ footer{
 
 
 /* ==========================================================
-   ACCESSIBILITY
+   REDUCED MOTION
 ========================================================== */
 
 @media(prefers-reduced-motion:reduce){
@@ -1075,8 +1760,11 @@ footer{
  *::before,
  *::after{
   animation-duration:.01ms!important;
+
   animation-iteration-count:1!important;
+
   scroll-behavior:auto!important;
+
   transition-duration:.01ms!important;
  }
 
@@ -1089,16 +1777,8 @@ footer{
 <body>
 
 
-<!-- ==========================================================
-     PAGE TRANSITION
-========================================================== -->
-
 <div id="pageTransition"></div>
 
-
-<!-- ==========================================================
-     LOADER
-========================================================== -->
 
 <div id="loader">
  <div class="loader-heart">♡</div>
@@ -1144,15 +1824,21 @@ footer{
 
   <h1>
    Hey,<br>
-   <span class="grad" id="name">Junhii</span>
+   <span class="grad" id="name">
+    Junhii
+   </span>
   </h1>
 
   <p id="subtitle">
    A little corner of the internet, just for you.
   </p>
 
-  <button class="btn pink" onclick="go('message')">
+  <button
+   class="btn pink"
+   onclick="go('message')">
+
    open this ♡
+
   </button>
 
   <div class="arrow">
@@ -1176,9 +1862,17 @@ footer{
  <div class="wrap">
 
   <div class="title">
-   <h2>just one thing</h2>
-   <p>short and sweet.</p>
+
+   <h2>
+    just one thing
+   </h2>
+
+   <p>
+    short and sweet.
+   </p>
+
   </div>
+
 
   <div class="message glass">
 
@@ -1186,21 +1880,20 @@ footer{
     💌
    </div>
 
-   <p id="mainMessage">
-    You make ordinary days a little more fun.
-    That's it. That's the message.
-   </p>
+   <p id="mainMessage"></p>
 
    <div id="secret">
 
-    <p id="secretMessage">
-     And yes... you're stuck with this friendship. ♡
-    </p>
+    <p id="secretMessage"></p>
 
    </div>
 
-   <button class="btn soft" onclick="reveal()">
+   <button
+    class="btn soft"
+    onclick="reveal()">
+
     there's more...
+
    </button>
 
   </div>
@@ -1211,7 +1904,95 @@ footer{
 
 
 <!-- ==========================================================
-     MEMORIES
+     💌 INTERACTIVE LETTER
+========================================================== -->
+
+<section id="letter">
+
+ <div class="wrap">
+
+  <div class="title">
+
+   <h2>
+    a little letter
+   </h2>
+
+   <p>
+    tap the envelope.
+   </p>
+
+  </div>
+
+
+  <div class="letter-wrap">
+
+   <div
+    class="envelope"
+    id="envelope"
+    onclick="openLetter()">
+
+    <div class="envelope-body"></div>
+
+    <div class="envelope-flap"></div>
+
+   </div>
+
+
+   <div
+    class="letter-paper"
+    id="letterPaper">
+
+    <h3>
+     Dear Junhii ♡
+    </h3>
+
+    <p id="letterText"></p>
+
+    <p>
+     That's all for now.
+     <br>
+     — from someone who clearly spent too much time making this website 😂
+    </p>
+
+   </div>
+
+  </div>
+
+ </div>
+
+</section>
+
+
+<!-- ==========================================================
+     📅 TIMELINE
+========================================================== -->
+
+<section id="timeline">
+
+ <div class="wrap">
+
+  <div class="title">
+
+   <h2>
+    our little timeline
+   </h2>
+
+   <p>
+    some moments worth remembering.
+   </p>
+
+  </div>
+
+
+  <div class="timeline" id="timelineBox"></div>
+
+ </div>
+
+</section>
+
+
+<!-- ==========================================================
+     🖼️ MEMORIES
 ========================================================== -->
 
 <section id="memories">
@@ -1219,44 +2000,26 @@ footer{
  <div class="wrap">
 
   <div class="title">
-   <h2>little memories</h2>
-   <p>tap a photo.</p>
+
+   <h2>
+    little memories
+   </h2>
+
+   <p>
+    swipe through them.
+   </p>
+
   </div>
 
-  <div class="polaroids">
 
-   <div class="polaroid" onclick="photo(this)">
-
-    <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=900&q=80">
-
-    <div class="caption">
-     one ♡
-    </div>
-
-   </div>
+  <div
+   class="gallery"
+   id="gallery">
+  </div>
 
 
-   <div class="polaroid" onclick="photo(this)">
-
-    <img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&w=900&q=80">
-
-    <div class="caption">
-     two ♡
-    </div>
-
-   </div>
-
-
-   <div class="polaroid" onclick="photo(this)">
-
-    <img src="https://images.unsplash.com/photo-1506869640319-fe1a24fd76dc?auto=format&fit=crop&w=900&q=80">
-
-    <div class="caption">
-     three ♡
-    </div>
-
-   </div>
-
+  <div class="gallery-hint">
+   ← swipe → · tap a photo to enlarge
   </div>
 
  </div>
@@ -1319,7 +2082,147 @@ footer{
 
 
 <!-- ==========================================================
-     MAGIC INTERACTION
+     🧸 JUNHII OS
+========================================================== -->
+
+<section id="junhiiOS">
+
+ <div class="wrap">
+
+  <div class="title">
+
+   <h2>
+    Junhii OS
+   </h2>
+
+   <p>
+    tiny personal dashboard.
+   </p>
+
+  </div>
+
+
+  <div class="os">
+
+   <div class="os-window">
+
+    <div class="os-top">
+
+     <span class="os-dot red"></span>
+     <span class="os-dot blue"></span>
+
+     <span class="os-title">
+      Junhii OS · v1.0
+     </span>
+
+    </div>
+
+
+    <div class="os-content">
+
+     <div class="os-status">
+
+      <div class="os-stat">
+
+       <b>♡</b>
+
+       <small>
+        status
+       </small>
+
+      </div>
+
+      <div class="os-stat">
+
+       <b>∞</b>
+
+       <small>
+        friendship
+       </small>
+
+      </div>
+
+      <div class="os-stat">
+
+       <b>100%</b>
+
+       <small>
+        chaos
+       </small>
+
+      </div>
+
+     </div>
+
+
+     <div class="os-apps">
+
+      <button
+       class="os-app"
+       onclick="go('letter')">
+
+       <span>💌</span>
+
+       <small>
+        Letter
+       </small>
+
+      </button>
+
+
+      <button
+       class="os-app"
+       onclick="go('timeline')">
+
+       <span>📅</span>
+
+       <small>
+        Timeline
+       </small>
+
+      </button>
+
+
+      <button
+       class="os-app"
+       onclick="go('memories')">
+
+       <span>📸</span>
+
+       <small>
+        Memories
+       </small>
+
+      </button>
+
+
+      <button
+       class="os-app"
+       onclick="go('game')">
+
+       <span>🎮</span>
+
+       <small>
+        Game
+       </small>
+
+      </button>
+
+     </div>
+
+    </div>
+
+   </div>
+
+  </div>
+
+ </div>
+
+</section>
+
+
+<!-- ==========================================================
+     MAGIC
 ========================================================== -->
 
 <section id="magic">
@@ -1389,17 +2292,125 @@ footer{
 
   <div class="surprise glass">
 
-   <button class="gift" onclick="surprise()">
+   <button
+    class="gift"
+    onclick="surprise()">
+
     🎁
+
    </button>
 
    <div id="surpriseText">
     something is hiding here...
    </div>
 
-   <button class="btn soft" onclick="hearts(event)">
+   <button
+    class="btn soft"
+    onclick="hearts(event)">
+
     ♡ click for happiness
+
    </button>
+
+  </div>
+
+ </div>
+
+</section>
+
+
+<!-- ==========================================================
+     🎮 MINI GAME
+========================================================== -->
+
+<section id="game">
+
+ <div class="wrap">
+
+  <div class="title">
+
+   <h2>
+    catch the hearts
+   </h2>
+
+   <p>
+    catch as many as you can before time runs out.
+   </p>
+
+  </div>
+
+
+  <div class="game glass">
+
+   <div class="game-info">
+
+    <span>
+     Score:
+     <b
+      class="game-score"
+      id="gameScore">
+      0
+     </b>
+    </span>
+
+    <span>
+     Time:
+     <b id="gameTime">
+      15
+     </b>s
+    </span>
+
+   </div>
+
+
+   <div
+    class="game-area"
+    id="gameArea">
+
+    <div
+     id="gameStartMessage"
+     style="
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+      text-align:center;
+      color:var(--muted);
+      padding:30px;
+     ">
+
+     <div>
+
+      <div style="font-size:45px">
+       💗
+      </div>
+
+      <p>
+       Tap start and catch the hearts!
+      </p>
+
+      <button
+       class="btn pink"
+       onclick="startGame()">
+
+       start game ♡
+
+      </button>
+
+     </div>
+
+    </div>
+
+   </div>
+
+
+   <div
+    class="game-message"
+    id="gameMessage">
+
+    Can you beat your score?
+
+   </div>
 
   </div>
 
@@ -1437,9 +2448,15 @@ footer{
      <span id="quizBar"></span>
     </div>
 
-    <p class="quiz-question" id="quizQuestion"></p>
+    <p
+     class="quiz-question"
+     id="quizQuestion">
+    </p>
 
-    <div class="answers" id="quizAnswers"></div>
+    <div
+     class="answers"
+     id="quizAnswers">
+    </div>
 
     <div class="quiz-nav">
 
@@ -1458,13 +2475,18 @@ footer{
    </div>
 
 
-   <div class="quiz-result" id="quizResult">
+   <div
+    class="quiz-result"
+    id="quizResult">
 
     <div>
      ✨
     </div>
 
-    <div class="score" id="quizScore"></div>
+    <div
+     class="score"
+     id="quizScore">
+    </div>
 
     <p id="quizResultText"></p>
 
@@ -1535,7 +2557,10 @@ footer{
 
   </div>
 
-  <audio id="audio" loop>
+
+  <audio
+   id="audio"
+   loop>
 
    <source
     src="music.mp3"
@@ -1588,14 +2613,13 @@ footer{
 </main>
 
 
-<!-- ==========================================================
-     FOOTER
-========================================================== -->
-
 <footer>
 
  made for
- <span id="foot">Junhii</span>
+ <span id="foot">
+  Junhii
+ </span>
+
  · no reason needed ♡
 
 </footer>
@@ -1631,7 +2655,7 @@ footer{
 
 
 /* ==========================================================
-   ✨ CUSTOMIZE YOUR WEBSITE HERE
+   CUSTOMIZE EVERYTHING HERE
 ========================================================== */
 
 const CUSTOM={
@@ -1647,25 +2671,45 @@ const CUSTOM={
  secretMessage:
  "And yes... secret message — ********(Still not the right time 👀)♡",
 
- songTitle:
- "Baby ♡",
 
- songArtist:
- "your song here",
+ /* LETTER */
+
+ letter:
+ "Some people make ordinary moments feel a little more special. That's probably the best way to describe you. So I made this tiny corner of the internet just because I could. ♡",
 
 
- surprises:[
+ /* TIMELINE */
 
-  "Plot twist: you're actually pretty awesome. ♡",
+ timeline:[
 
-  "Officially certified as a 10/10 best friend.",
+  {
+   date:"The beginning 🌱",
+   title:"First memory",
+   text:"Put your first important memory here."
+  },
 
-  "This friendship has no unsubscribe button. :')",
+  {
+   date:"That one day 😂",
+   title:"A funny moment",
+   text:"Add a funny moment that you both remember."
+  },
 
-  "Okay, that's enough cuteness for today. ♡"
+  {
+   date:"Somewhere along the way 📸",
+   title:"A favourite memory",
+   text:"Add another special memory here."
+  },
+
+  {
+   date:"Today ♡",
+   title:"Still here",
+   text:"And somehow the story is still going."
+  }
 
  ],
 
+
+ /* PHOTOS */
 
  photos:[
 
@@ -1682,16 +2726,37 @@ const CUSTOM={
   [
    "https://images.unsplash.com/photo-1506869640319-fe1a24fd76dc?auto=format&fit=crop&w=900&q=80",
    "three ♡"
+  ],
+
+  [
+   "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&w=900&q=80",
+   "four ♡"
   ]
 
  ],
 
 
+ /* SURPRISES */
+
+ surprises:[
+
+  "Plot twist: you're actually pretty awesome. ♡",
+
+  "Officially certified as a 10/10 best friend.",
+
+  "This friendship has no unsubscribe button. :')",
+
+  "Okay, that's enough cuteness for today. ♡"
+
+ ],
+
+
+ /* QUIZ */
+
  quizzes:[
 
   {
-   question:
-   "What's my favourite movie?💀",
+   question:"What's my favourite movie? 💀",
 
    answers:[
     "The Conjuring",
@@ -1703,10 +2768,8 @@ const CUSTOM={
    correct:1
   },
 
-
   {
-   question:
-   "What's our friendship level?",
+   question:"What's our friendship level?",
 
    answers:[
     "Casual",
@@ -1718,10 +2781,8 @@ const CUSTOM={
    correct:2
   },
 
-
   {
-   question:
-   "Who would survive longer in a horror movie?",
+   question:"Who would survive longer in a horror movie?",
 
    answers:[
     "Me",
@@ -1733,10 +2794,8 @@ const CUSTOM={
    correct:2
   },
 
-
   {
-   question:
-   "Who we are?👀",
+   question:"Who we are? 👀",
 
    answers:[
     "Friends",
@@ -1781,45 +2840,54 @@ const CUSTOM={
 
 
  colors:{
-  pink:"#e994b4",
-  lavender:"#aa98df",
-  background:"#fff9fc"
+  red:"#e63950",
+  red2:"#ff6b7d",
+  blue:"#3d73e8",
+  blue2:"#6f9cff",
+  background:"#fff8f8"
  }
 
 };
 
 
 /* ==========================================================
-   APPLY CUSTOM SETTINGS
+   APPLY SETTINGS
 ========================================================== */
 
-document.getElementById("name").textContent =
+document.getElementById("name").textContent=
  CUSTOM.name;
 
-document.getElementById("foot").textContent =
+document.getElementById("foot").textContent=
  CUSTOM.name;
 
-document.getElementById("mainMessage").textContent =
+document.getElementById("mainMessage").textContent=
  CUSTOM.mainMessage;
 
-document.getElementById("secretMessage").textContent =
+document.getElementById("secretMessage").textContent=
  CUSTOM.secretMessage;
 
-document.getElementById("song").textContent =
- CUSTOM.songTitle;
-
-document.getElementById("artist").textContent =
- CUSTOM.songArtist;
+document.getElementById("letterText").textContent=
+ CUSTOM.letter;
 
 
 document.documentElement.style.setProperty(
- "--pink",
- CUSTOM.colors.pink
+ "--red",
+ CUSTOM.colors.red
 );
 
 document.documentElement.style.setProperty(
- "--lav",
- CUSTOM.colors.lavender
+ "--red2",
+ CUSTOM.colors.red2
+);
+
+document.documentElement.style.setProperty(
+ "--blue",
+ CUSTOM.colors.blue
+);
+
+document.documentElement.style.setProperty(
+ "--blue2",
+ CUSTOM.colors.blue2
 );
 
 document.documentElement.style.setProperty(
@@ -1829,16 +2897,77 @@ document.documentElement.style.setProperty(
 
 
 /* ==========================================================
-   PHOTOS
+   GALLERY
 ========================================================== */
 
-document.querySelectorAll(".polaroid").forEach((p,i)=>{
+const gallery=
+ document.getElementById("gallery");
 
- p.querySelector("img").src =
- CUSTOM.photos[i][0];
+CUSTOM.photos.forEach((photoData,i)=>{
 
- p.querySelector(".caption").textContent =
- CUSTOM.photos[i][1];
+ const card=
+  document.createElement("div");
+
+ card.className="gallery-card";
+
+ card.onclick=()=>{
+  openPhoto(photoData[0]);
+ };
+
+ card.innerHTML=`
+
+  <img
+   src="${photoData[0]}"
+   alt="Memory ${i+1}">
+
+  <div class="gallery-caption">
+   ${photoData[1]}
+  </div>
+
+ `;
+
+ gallery.appendChild(card);
+
+});
+
+
+/* ==========================================================
+   TIMELINE
+========================================================== */
+
+const timelineBox=
+ document.getElementById("timelineBox");
+
+CUSTOM.timeline.forEach(item=>{
+
+ const element=
+  document.createElement("div");
+
+ element.className="timeline-item";
+
+ element.innerHTML=`
+
+  <div class="timeline-dot"></div>
+
+  <div class="timeline-card glass">
+
+   <small>
+    ${item.date}
+   </small>
+
+   <h3>
+    ${item.title}
+   </h3>
+
+   <p>
+    ${item.text}
+   </p>
+
+  </div>
+
+ `;
+
+ timelineBox.appendChild(element);
 
 });
 
@@ -1857,28 +2986,44 @@ setTimeout(()=>{
 
 
 /* ==========================================================
-   ⌨️ TYPING ANIMATION
+   TYPING
 ========================================================== */
 
 function typeText(element,text,speed=40){
 
- element.innerHTML="";
+ element.textContent="";
+
+ let i=0;
 
  const cursor=
   document.createElement("span");
 
- cursor.className="typing-cursor";
+ cursor.style.display="inline-block";
+
+ cursor.style.width="2px";
+
+ cursor.style.height="1em";
+
+ cursor.style.background="var(--red)";
+
+ cursor.style.marginLeft="3px";
+
+ cursor.style.verticalAlign="-2px";
+
+ cursor.style.animation=
+  "pulse .7s infinite";
 
  element.appendChild(cursor);
 
- let i=0;
 
  function type(){
 
   if(i<text.length){
 
    cursor.before(
-    document.createTextNode(text.charAt(i))
+    document.createTextNode(
+     text.charAt(i)
+    )
    );
 
    i++;
@@ -1901,7 +3046,7 @@ typeText(
 
 
 /* ==========================================================
-   🌊 SMOOTH PAGE TRANSITION NAVIGATION
+   NAVIGATION
 ========================================================== */
 
 function go(id){
@@ -1937,7 +3082,40 @@ function go(id){
 
 
 /* ==========================================================
-   SECRET MESSAGE
+   LETTER
+========================================================== */
+
+function openLetter(){
+
+ const envelope=
+  document.getElementById("envelope");
+
+ const paper=
+  document.getElementById("letterPaper");
+
+ envelope.classList.toggle("open");
+
+ if(envelope.classList.contains("open")){
+
+  setTimeout(()=>{
+
+   paper.classList.add("show");
+
+   hearts();
+
+  },350);
+
+ }else{
+
+  paper.classList.remove("show");
+
+ }
+
+}
+
+
+/* ==========================================================
+   SECRET
 ========================================================== */
 
 function reveal(){
@@ -1957,9 +3135,11 @@ function reveal(){
 
 function surprise(){
 
- const a=CUSTOM.surprises;
+ const a=
+  CUSTOM.surprises;
 
- document.getElementById("surpriseText")
+ document
+  .getElementById("surpriseText")
   .textContent=
   a[Math.floor(Math.random()*a.length)];
 
@@ -1980,7 +3160,7 @@ function mood(type){
   "Correct choice. Keep that smile. 🌸",
 
   chaos:
-  "Ah. So we're choosing violence today. 🌀",
+  "Ah. So we're choosing chaos today. 🌀",
 
   sleepy:
   "Approved. Go get some sleep. 🌙",
@@ -1990,7 +3170,8 @@ function mood(type){
 
  };
 
- document.getElementById("moodResult")
+ document
+  .getElementById("moodResult")
   .textContent=m[type];
 
  hearts();
@@ -1999,7 +3180,7 @@ function mood(type){
 
 
 /* ==========================================================
-   ✨ MAGIC INTERACTION
+   MAGIC
 ========================================================== */
 
 const magicMessages=[
@@ -2036,13 +3217,18 @@ function magicMoment(){
 
  const message=
   magicMessages[
-   Math.floor(Math.random()*magicMessages.length)
+   Math.floor(
+    Math.random()*
+    magicMessages.length
+   )
   ];
 
- document.getElementById("magicTitle")
+ document
+  .getElementById("magicTitle")
   .textContent=message[0];
 
- document.getElementById("magicText")
+ document
+  .getElementById("magicText")
   .textContent=message[1];
 
  hearts();
@@ -2053,7 +3239,7 @@ function magicMoment(){
 
 
 /* ==========================================================
-   ORIGINAL FLOATING HEARTS
+   HEARTS
 ========================================================== */
 
 function hearts(e){
@@ -2066,9 +3252,13 @@ function hearts(e){
   e.clientY:
   innerHeight/2;
 
-
- ["♡","♥","✦","✿","✨"]
- .forEach((s,i)=>{
+ [
+  "♡",
+  "♥",
+  "✦",
+  "✿",
+  "✨"
+ ].forEach((s,i)=>{
 
   const h=
    document.createElement("span");
@@ -2098,7 +3288,7 @@ function hearts(e){
 
 
 /* ==========================================================
-   💗 CONTINUOUS FALLING HEARTS
+   FALLING HEARTS
 ========================================================== */
 
 function createFallingHeart(){
@@ -2106,8 +3296,7 @@ function createFallingHeart(){
  const heart=
   document.createElement("span");
 
- heart.className=
-  "falling-heart";
+ heart.className="falling-heart";
 
  heart.textContent=
   ["♡","♥","💗","💕","✦"]
@@ -2120,24 +3309,24 @@ function createFallingHeart(){
   (12+Math.random()*14)+"px";
 
  heart.style.animationDuration=
-  (5+Math.random()*5)+"s";
+  (6+Math.random()*5)+"s";
 
  document.body.appendChild(heart);
 
  setTimeout(()=>{
   heart.remove();
- },10000);
+ },11000);
 
 }
 
 setInterval(
  createFallingHeart,
- 700
+ 1100
 );
 
 
 /* ==========================================================
-   ✨ RANDOM SPARKLES
+   SPARKLES
 ========================================================== */
 
 function createSparkle(){
@@ -2145,8 +3334,7 @@ function createSparkle(){
  const sparkle=
   document.createElement("span");
 
- sparkle.className=
-  "sparkle";
+ sparkle.className="sparkle";
 
  sparkle.textContent=
   ["✦","✧","✨","⋆"]
@@ -2168,93 +3356,41 @@ function createSparkle(){
 
 setInterval(
  createSparkle,
- 900
+ 1300
 );
 
 
 /* ==========================================================
-   🐻 FLOATING CUTE CHARACTERS
-========================================================== */
-
-function createFloatingCharacter(){
-
- const characters=[
-  "🐻",
-  "🐰",
-  "🐱",
-  "🧸",
-  "🌸",
-  "💗",
-  "🎀",
-  "☁️"
- ];
-
- const character=
-  document.createElement("span");
-
- character.className=
-  "floating-character";
-
- character.textContent=
-  characters[
-   Math.floor(Math.random()*characters.length)
-  ];
-
- character.style.left=
-  Math.random()*100+"vw";
-
- character.style.bottom=
-  "-40px";
-
- character.style.animationDuration=
-  (7+Math.random()*5)+"s";
-
- document.body.appendChild(character);
-
- setTimeout(()=>{
-  character.remove();
- },13000);
-
-}
-
-setInterval(
- createFloatingCharacter,
- 3500
-);
-
-
-/* ==========================================================
-   🖱️ CUTE CURSOR TRAIL
+   CURSOR
 ========================================================== */
 
 if(
- window.matchMedia("(hover: hover) and (pointer: fine)").matches
+ window.matchMedia(
+  "(hover: hover) and (pointer: fine)"
+ ).matches
 ){
 
  let lastCursorTime=0;
 
  document.addEventListener(
   "mousemove",
-  (e)=>{
+  e=>{
 
    const now=Date.now();
 
-   if(now-lastCursorTime<80)
+   if(now-lastCursorTime<100)
     return;
 
    lastCursorTime=now;
 
-
    const heart=
     document.createElement("span");
 
-   heart.className=
-    "cursor-heart";
+   heart.className="cursor-heart";
 
    heart.textContent=
     ["♡","♥","✦","✧"]
     [Math.floor(Math.random()*4)];
-
 
    heart.style.left=
     e.clientX+"px";
@@ -2262,9 +3398,7 @@ if(
    heart.style.top=
     e.clientY+"px";
 
-
    document.body.appendChild(heart);
-
 
    setTimeout(()=>{
     heart.remove();
@@ -2277,14 +3411,12 @@ if(
 
 
 /* ==========================================================
-   🎉 CONFETTI
+   CONFETTI
 ========================================================== */
 
 function createConfetti(){
 
- const pieces=45;
-
- for(let i=0;i<pieces;i++){
+ for(let i=0;i<40;i++){
 
   const c=
    document.createElement("span");
@@ -2304,6 +3436,11 @@ function createConfetti(){
 
   c.style.animationDelay=
    Math.random()*.4+"s";
+
+  c.style.background=
+   Math.random()>.5
+    ? "var(--red)"
+    : "var(--blue)";
 
   c.style.borderRadius=
    Math.random()>.5
@@ -2325,16 +3462,16 @@ function createConfetti(){
    PHOTO MODAL
 ========================================================== */
 
-function photo(el){
+function openPhoto(src){
 
  document.getElementById("big").src=
-  el.querySelector("img").src;
+  src;
 
- document.getElementById("modal")
+ document
+  .getElementById("modal")
   .classList.add("open");
 
 }
-
 
 function closePhoto(e){
 
@@ -2344,7 +3481,8 @@ function closePhoto(e){
   e.target.className==="x"
  ){
 
-  document.getElementById("modal")
+  document
+   .getElementById("modal")
    .classList.remove("open");
 
  }
@@ -2353,7 +3491,225 @@ function closePhoto(e){
 
 
 /* ==========================================================
-   QUIZ ENGINE
+   🎮 MINI GAME
+========================================================== */
+
+let gameRunning=false;
+
+let gameScore=0;
+
+let gameTime=15;
+
+let gameTimer=null;
+
+let heartTimer=null;
+
+
+function startGame(){
+
+ if(gameRunning)
+  return;
+
+ gameRunning=true;
+
+ gameScore=0;
+
+ gameTime=15;
+
+ document.getElementById("gameScore")
+  .textContent="0";
+
+ document.getElementById("gameTime")
+  .textContent="15";
+
+ document.getElementById("gameMessage")
+  .textContent=
+  "Catch them! 💗";
+
+ document.getElementById("gameStartMessage")
+  .style.display="none";
+
+
+ spawnGameHeart();
+
+
+ gameTimer=setInterval(()=>{
+
+  gameTime--;
+
+  document.getElementById("gameTime")
+   .textContent=gameTime;
+
+  if(gameTime<=0){
+
+   endGame();
+
+  }
+
+ },1000);
+
+
+ heartTimer=setInterval(()=>{
+
+  if(gameRunning)
+   spawnGameHeart();
+
+ },650);
+
+}
+
+
+function spawnGameHeart(){
+
+ if(!gameRunning)
+  return;
+
+ const area=
+  document.getElementById("gameArea");
+
+ const old=
+  area.querySelector(".game-heart");
+
+ if(old)
+  old.remove();
+
+
+ const heart=
+  document.createElement("button");
+
+ heart.className="game-heart";
+
+ heart.textContent=
+  Math.random()>.35
+   ? "💗"
+   : "💙";
+
+
+ const maxX=
+  Math.max(
+   10,
+   area.clientWidth-55
+  );
+
+ const maxY=
+  Math.max(
+   10,
+   area.clientHeight-55
+  );
+
+ heart.style.left=
+  Math.random()*maxX+"px";
+
+ heart.style.top=
+  Math.random()*maxY+"px";
+
+
+ heart.onclick=()=>{
+
+  if(!gameRunning)
+   return;
+
+  gameScore++;
+
+  document.getElementById("gameScore")
+   .textContent=gameScore;
+
+  heart.remove();
+
+  if(gameScore%5===0)
+   hearts();
+
+  spawnGameHeart();
+
+ };
+
+ area.appendChild(heart);
+
+}
+
+
+function endGame(){
+
+ gameRunning=false;
+
+ clearInterval(gameTimer);
+ clearInterval(heartTimer);
+
+ document
+  .querySelectorAll(".game-heart")
+  .forEach(h=>h.remove());
+
+
+ let message;
+
+ if(gameScore>=20){
+
+  message=
+   "WHAT?! 😭 That's actually impressive.";
+
+ }else if(gameScore>=12){
+
+  message=
+   "Okayyy! That's a pretty good score. 💙";
+
+ }else if(gameScore>=6){
+
+  message=
+   "Not bad! You can definitely beat that. ♡";
+
+ }else{
+
+  message=
+   "The hearts won this round. 😭 Try again!";
+
+ }
+
+
+ document.getElementById("gameMessage")
+  .textContent=
+  `Final score: ${gameScore} · ${message}`;
+
+
+ document.getElementById("gameStartMessage")
+  .style.display="grid";
+
+ document.getElementById("gameStartMessage")
+  .innerHTML=`
+
+  <div>
+
+   <div style="font-size:45px">
+    ${gameScore>=12?"🏆":"💗"}
+   </div>
+
+   <p>
+    Score: <b>${gameScore}</b>
+   </p>
+
+   <button
+    class="btn pink"
+    onclick="startGame()">
+
+    play again ♡
+
+   </button>
+
+  </div>
+
+ `;
+
+
+ if(gameScore>=12){
+
+  createConfetti();
+
+ }
+
+}
+
+
+/* ==========================================================
+   QUIZ
 ========================================================== */
 
 let quizIndex=0;
@@ -2369,11 +3725,13 @@ function renderQuiz(){
   CUSTOM.quizzes[quizIndex];
 
 
- document.getElementById("quizQuestion")
+ document
+  .getElementById("quizQuestion")
   .textContent=q.question;
 
 
- document.getElementById("quizBar")
+ document
+  .getElementById("quizBar")
   .style.width=
   ((quizIndex/CUSTOM.quizzes.length)*100)+"%";
 
@@ -2383,11 +3741,11 @@ function renderQuiz(){
 
  box.innerHTML="";
 
-
  quizAnswered=false;
 
 
- document.getElementById("nextQuiz")
+ document
+  .getElementById("nextQuiz")
   .disabled=true;
 
 
@@ -2409,9 +3767,11 @@ function renderQuiz(){
  });
 
 
- document.getElementById("nextQuiz")
+ document
+  .getElementById("nextQuiz")
   .textContent=
-  quizIndex===CUSTOM.quizzes.length-1
+  quizIndex===
+  CUSTOM.quizzes.length-1
    ? "see result ♡"
    : "next ♡";
 
@@ -2459,13 +3819,16 @@ function chooseAnswer(i,button){
  }
 
 
- document.getElementById("nextQuiz")
+ document
+  .getElementById("nextQuiz")
   .disabled=false;
 
 
- document.getElementById("quizBar")
+ document
+  .getElementById("quizBar")
   .style.width=
-  (((quizIndex+1)/CUSTOM.quizzes.length)*100)+"%";
+  (((quizIndex+1)/
+    CUSTOM.quizzes.length)*100)+"%";
 
 }
 
@@ -2496,21 +3859,25 @@ function nextQuiz(){
 
 function showQuizResult(){
 
- document.getElementById("quizGame")
+ document
+  .getElementById("quizGame")
   .style.display="none";
 
 
- document.getElementById("quizResult")
+ document
+  .getElementById("quizResult")
   .classList.add("show");
 
 
  const percent=
   Math.round(
-   (quizScore/CUSTOM.quizzes.length)*100
+   (quizScore/
+    CUSTOM.quizzes.length)*100
   );
 
 
- document.getElementById("quizScore")
+ document
+  .getElementById("quizScore")
   .textContent=
   percent+"%";
 
@@ -2527,17 +3894,15 @@ function showQuizResult(){
  });
 
 
- document.getElementById("quizResultText")
-  .textContent=result.text;
+ document
+  .getElementById("quizResultText")
+  .textContent=
+  result.text;
 
 
  hearts();
 
  createConfetti();
-
- setTimeout(()=>{
-  createConfetti();
- },500);
 
 }
 
@@ -2548,14 +3913,13 @@ function restartQuiz(){
 
  quizScore=0;
 
-
- document.getElementById("quizResult")
+ document
+  .getElementById("quizResult")
   .classList.remove("show");
 
-
- document.getElementById("quizGame")
+ document
+  .getElementById("quizGame")
   .style.display="block";
-
 
  renderQuiz();
 
@@ -2566,7 +3930,7 @@ renderQuiz();
 
 
 /* ==========================================================
-   MUSIC PLAYER
+   MUSIC
 ========================================================== */
 
 const audio=
@@ -2574,6 +3938,11 @@ const audio=
 
 const play=
  document.getElementById("play");
+
+
+document.getElementById("song")
+ .textContent=
+ "Baby ♡";
 
 
 function music(){
@@ -2606,7 +3975,7 @@ function music(){
 
 
 /* ==========================================================
-   NOTE SAVING
+   NOTE
 ========================================================== */
 
 const note=
@@ -2614,16 +3983,20 @@ const note=
 
 
 note.value=
- localStorage.getItem("junhii-note") || "";
+ localStorage.getItem(
+  "junhii-note"
+ ) || "";
 
 
 note.addEventListener(
  "input",
  ()=>{
+
   localStorage.setItem(
    "junhii-note",
    note.value
   );
+
  }
 );
 
