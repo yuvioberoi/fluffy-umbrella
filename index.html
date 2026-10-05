@@ -7,6 +7,7 @@
 <title>For Junhii ♡</title>
 
 <style>
+
 :root{
  --bg:#fff9fc;
  --text:#302833;
@@ -19,7 +20,9 @@
  --r:30px;
 }
 
-*{box-sizing:border-box}
+*{
+ box-sizing:border-box;
+}
 
 html{
  scroll-behavior:smooth;
@@ -53,7 +56,10 @@ button{
  -webkit-backdrop-filter:blur(20px);
 }
 
-/* LOADER */
+
+/* ==========================================================
+   LOADER
+========================================================== */
 
 #loader{
  position:fixed;
@@ -81,7 +87,10 @@ button{
  }
 }
 
-/* NAVIGATION */
+
+/* ==========================================================
+   NAVIGATION
+========================================================== */
 
 #topbar{
  position:fixed;
@@ -114,7 +123,10 @@ button{
  color:var(--text);
 }
 
-/* HERO */
+
+/* ==========================================================
+   HERO
+========================================================== */
 
 .hero{
  min-height:100svh;
@@ -182,7 +194,10 @@ h1{
  }
 }
 
-/* SECTIONS */
+
+/* ==========================================================
+   SECTIONS
+========================================================== */
 
 section{
  padding:90px 0;
@@ -205,7 +220,10 @@ section{
  margin:0;
 }
 
-/* BUTTONS */
+
+/* ==========================================================
+   BUTTONS
+========================================================== */
 
 .btn{
  border:0;
@@ -231,7 +249,10 @@ section{
  color:var(--text);
 }
 
-/* MESSAGE */
+
+/* ==========================================================
+   MESSAGE
+========================================================== */
 
 .message{
  max-width:650px;
@@ -271,7 +292,10 @@ section{
  }
 }
 
-/* POLAROIDS */
+
+/* ==========================================================
+   POLAROIDS
+========================================================== */
 
 .polaroids{
  display:grid;
@@ -321,7 +345,10 @@ section{
  color:#776977;
 }
 
-/* MOOD */
+
+/* ==========================================================
+   MOOD
+========================================================== */
 
 .mood{
  max-width:600px;
@@ -357,7 +384,10 @@ section{
  color:var(--muted);
 }
 
-/* SURPRISE */
+
+/* ==========================================================
+   SURPRISE
+========================================================== */
 
 .surprise{
  max-width:520px;
@@ -388,7 +418,10 @@ section{
  margin:17px 0;
 }
 
-/* MUSIC */
+
+/* ==========================================================
+   MUSIC
+========================================================== */
 
 .music{
  max-width:520px;
@@ -434,7 +467,10 @@ section{
  cursor:pointer;
 }
 
-/* NOTE */
+
+/* ==========================================================
+   NOTE
+========================================================== */
 
 .note{
  max-width:580px;
@@ -464,7 +500,10 @@ section{
  margin-top:8px;
 }
 
-/* QUIZ */
+
+/* ==========================================================
+   QUIZ
+========================================================== */
 
 .quiz{
  max-width:650px;
@@ -567,7 +606,10 @@ section{
  margin:0 0 22px;
 }
 
-/* FOOTER */
+
+/* ==========================================================
+   FOOTER
+========================================================== */
 
 footer{
  text-align:center;
@@ -576,7 +618,10 @@ footer{
  padding:40px 0 70px;
 }
 
-/* FLOATING HEARTS */
+
+/* ==========================================================
+   ORIGINAL FLOATING HEARTS
+========================================================== */
 
 .float{
  position:fixed;
@@ -593,7 +638,107 @@ footer{
  }
 }
 
-/* MODAL */
+
+/* ==========================================================
+   💗 FALLING HEARTS
+========================================================== */
+
+.falling-heart{
+ position:fixed;
+ top:-30px;
+ pointer-events:none;
+ z-index:5;
+ color:var(--pink);
+ font-size:18px;
+ opacity:.75;
+ animation:fallHeart linear forwards;
+}
+
+@keyframes fallHeart{
+
+ 0%{
+  transform:translateY(0) rotate(0deg);
+  opacity:0;
+ }
+
+ 10%{
+  opacity:.75;
+ }
+
+ 100%{
+  transform:translateY(110vh) rotate(360deg);
+  opacity:0;
+ }
+}
+
+
+/* ==========================================================
+   ✨ SPARKLES
+========================================================== */
+
+.sparkle{
+ position:fixed;
+ pointer-events:none;
+ z-index:45;
+ color:var(--lav);
+ font-size:14px;
+ animation:sparkleAnim 1s ease-out forwards;
+}
+
+@keyframes sparkleAnim{
+
+ 0%{
+  opacity:0;
+  transform:scale(.3) rotate(0deg);
+ }
+
+ 30%{
+  opacity:1;
+ }
+
+ 100%{
+  opacity:0;
+  transform:
+   scale(1.5)
+   rotate(90deg)
+   translateY(-25px);
+ }
+}
+
+
+/* ==========================================================
+   🖱️ CUTE CURSOR TRAIL
+========================================================== */
+
+.cursor-heart{
+ position:fixed;
+ pointer-events:none;
+ z-index:99;
+ font-size:15px;
+ color:var(--pink);
+ animation:cursorFloat .8s ease-out forwards;
+}
+
+@keyframes cursorFloat{
+
+ 0%{
+  opacity:1;
+  transform:scale(1);
+ }
+
+ 100%{
+  opacity:0;
+  transform:
+   translateY(-25px)
+   scale(.3)
+   rotate(20deg);
+ }
+}
+
+
+/* ==========================================================
+   MODAL
+========================================================== */
 
 .modal{
  display:none;
@@ -638,7 +783,10 @@ footer{
  z-index:2;
 }
 
-/* MOBILE */
+
+/* ==========================================================
+   MOBILE
+========================================================== */
 
 @media(max-width:650px){
 
@@ -675,22 +823,60 @@ footer{
  .quiz-question{
   font-size:18px;
  }
+
+ .falling-heart{
+  font-size:15px;
+ }
+
+ .sparkle{
+  font-size:12px;
+ }
 }
+
 </style>
 </head>
 
+
 <body>
+
+
+<!-- ==========================================================
+     LOADER
+========================================================== -->
 
 <div id="loader">
  <div class="loader-heart">♡</div>
 </div>
 
+
+<!-- ==========================================================
+     NAVIGATION
+========================================================== -->
+
 <nav id="topbar">
- <button onclick="go('home')">home</button>
- <button onclick="go('memories')">memories</button>
- <button onclick="go('quiz')">quiz</button>
- <button onclick="go('surprise')">surprise</button>
+
+ <button onclick="go('home')">
+  home
+ </button>
+
+ <button onclick="go('memories')">
+  memories
+ </button>
+
+ <button onclick="go('quiz')">
+  quiz
+ </button>
+
+ <button onclick="go('surprise')">
+  surprise
+ </button>
+
 </nav>
+
+
+<!-- ==========================================================
+     HERO
+========================================================== -->
 
 <header class="hero" id="home">
 
@@ -721,9 +907,13 @@ footer{
 
 </header>
 
+
 <main>
 
-<!-- MESSAGE -->
+
+<!-- ==========================================================
+     MESSAGE
+========================================================== -->
 
 <section id="message">
 
@@ -741,7 +931,8 @@ footer{
    </div>
 
    <p id="mainMessage">
-    You make ordinary days a little more fun. That's it. That's the message.
+    You make ordinary days a little more fun.
+    That's it. That's the message.
    </p>
 
    <div id="secret">
@@ -763,7 +954,9 @@ footer{
 </section>
 
 
-<!-- MEMORIES -->
+<!-- ==========================================================
+     MEMORIES
+========================================================== -->
 
 <section id="memories">
 
@@ -777,18 +970,35 @@ footer{
   <div class="polaroids">
 
    <div class="polaroid" onclick="photo(this)">
+
     <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=900&q=80">
-    <div class="caption">one ♡</div>
+
+    <div class="caption">
+     one ♡
+    </div>
+
    </div>
 
+
    <div class="polaroid" onclick="photo(this)">
+
     <img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&w=900&q=80">
-    <div class="caption">two ♡</div>
+
+    <div class="caption">
+     two ♡
+    </div>
+
    </div>
 
+
    <div class="polaroid" onclick="photo(this)">
+
     <img src="https://images.unsplash.com/photo-1506869640319-fe1a24fd76dc?auto=format&fit=crop&w=900&q=80">
-    <div class="caption">three ♡</div>
+
+    <div class="caption">
+     three ♡
+    </div>
+
    </div>
 
   </div>
@@ -798,16 +1008,26 @@ footer{
 </section>
 
 
-<!-- MOOD -->
+<!-- ==========================================================
+     MOOD
+========================================================== -->
 
 <section>
 
  <div class="wrap">
 
   <div class="title">
-   <h2>what's the vibe?</h2>
-   <p>choose one.</p>
+
+   <h2>
+    what's the vibe?
+   </h2>
+
+   <p>
+    choose one.
+   </p>
+
   </div>
+
 
   <div class="mood glass">
 
@@ -842,16 +1062,26 @@ footer{
 </section>
 
 
-<!-- SURPRISE -->
+<!-- ==========================================================
+     SURPRISE
+========================================================== -->
 
 <section id="surprise">
 
  <div class="wrap">
 
   <div class="title">
-   <h2>one tiny surprise</h2>
-   <p>you know you want to.</p>
+
+   <h2>
+    one tiny surprise
+   </h2>
+
+   <p>
+    you know you want to.
+   </p>
+
   </div>
+
 
   <div class="surprise glass">
 
@@ -874,7 +1104,9 @@ footer{
 </section>
 
 
-<!-- QUIZ -->
+<!-- ==========================================================
+     QUIZ
+========================================================== -->
 
 <section id="quiz">
 
@@ -912,7 +1144,9 @@ footer{
       id="nextQuiz"
       onclick="nextQuiz()"
       disabled>
+
       next ♡
+
      </button>
 
     </div>
@@ -922,14 +1156,20 @@ footer{
 
    <div class="quiz-result" id="quizResult">
 
-    <div>✨</div>
+    <div>
+     ✨
+    </div>
 
     <div class="score" id="quizScore"></div>
 
     <p id="quizResultText"></p>
 
-    <button class="btn pink" onclick="restartQuiz()">
+    <button
+     class="btn pink"
+     onclick="restartQuiz()">
+
      play again ♡
+
     </button>
 
    </div>
@@ -941,16 +1181,26 @@ footer{
 </section>
 
 
-<!-- MUSIC -->
+<!-- ==========================================================
+     MUSIC
+========================================================== -->
 
 <section>
 
  <div class="wrap">
 
   <div class="title">
-   <h2>a song</h2>
-   <p>replace it with your song later.</p>
+
+   <h2>
+    a song
+   </h2>
+
+   <p>
+    replace it with your song later.
+   </p>
+
   </div>
+
 
   <div class="music glass">
 
@@ -970,14 +1220,24 @@ footer{
 
    </div>
 
-   <button class="play" id="play" onclick="music()">
+   <button
+    class="play"
+    id="play"
+    onclick="music()">
+
     ▶
+
    </button>
 
   </div>
 
+
   <audio id="audio" loop>
-   <source src="music.mp3" type="audio/mpeg">
+
+   <source
+    src="music.mp3"
+    type="audio/mpeg">
+
   </audio>
 
  </div>
@@ -985,16 +1245,26 @@ footer{
 </section>
 
 
-<!-- NOTE -->
+<!-- ==========================================================
+     NOTE
+========================================================== -->
 
 <section>
 
  <div class="wrap">
 
   <div class="title">
-   <h2>your little note</h2>
-   <p>type something and it stays on this device.</p>
+
+   <h2>
+    your little note
+   </h2>
+
+   <p>
+    type something and it stays on this device.
+   </p>
+
   </div>
+
 
   <div class="note glass">
 
@@ -1015,21 +1285,36 @@ footer{
 </main>
 
 
+<!-- ==========================================================
+     FOOTER
+========================================================== -->
+
 <footer>
- made for <span id="foot">Junhii</span> · no reason needed ♡
+
+ made for
+ <span id="foot">Junhii</span>
+ · no reason needed ♡
+
 </footer>
 
 
-<!-- PHOTO MODAL -->
+<!-- ==========================================================
+     PHOTO MODAL
+========================================================== -->
 
-<div class="modal" id="modal" onclick="closePhoto(event)">
+<div
+ class="modal"
+ id="modal"
+ onclick="closePhoto(event)">
 
  <div class="modalbox">
 
   <button
    class="x"
    onclick="closePhoto()">
+
    ×
+
   </button>
 
   <img id="big">
@@ -1041,9 +1326,10 @@ footer{
 
 <script>
 
+
 /* ==========================================================
    ✨ CUSTOMIZE YOUR WEBSITE HERE
-   ========================================================== */
+========================================================== */
 
 const CUSTOM={
 
@@ -1078,8 +1364,6 @@ const CUSTOM={
  ],
 
 
- /* PHOTOS */
-
  photos:[
 
   [
@@ -1100,30 +1384,20 @@ const CUSTOM={
  ],
 
 
- /* =========================================================
-    🧠 CUSTOMIZE YOUR QUIZ HERE
-
-    correct:
-    first answer  = 0
-    second answer = 1
-    third answer  = 2
-    fourth answer = 3
-    ========================================================= */
-
  quizzes:[
 
   {
    question:
-   "What's my favourite movie?💀",
+   "Who is more likely to start a random argument? 😂",
 
    answers:[
-    "The Conjuring",
-    "Harry Potter",
-    "Sinister",
-    "Hocus Pocus"
+    "Me",
+    "You",
+    "Both of us",
+    "Nobody"
    ],
 
-   correct:1
+   correct:2
   },
 
 
@@ -1159,13 +1433,13 @@ const CUSTOM={
 
   {
    question:
-   "Who we are? 👀",
+   "What's the correct answer to every question?",
 
    answers:[
-    "Friends",
-    "Siblings",
-    "Just Friends 😂",
-    "Ofc Friends"
+    "Maybe",
+    "No idea",
+    "Obviously me",
+    "42"
    ],
 
    correct:2
@@ -1173,8 +1447,6 @@ const CUSTOM={
 
  ],
 
-
- /* QUIZ RESULT MESSAGES */
 
  quizResults:[
 
@@ -1205,12 +1477,10 @@ const CUSTOM={
  ],
 
 
- /* COLORS */
-
  colors:{
-  pink:"#6c9cff",
-  lavender:"#9b8cff",
-  background:"#f7f9ff"
+  pink:"#e994b4",
+  lavender:"#aa98df",
+  background:"#fff9fc"
  }
 
 };
@@ -1218,7 +1488,7 @@ const CUSTOM={
 
 /* ==========================================================
    APPLY CUSTOM SETTINGS
-   ========================================================== */
+========================================================== */
 
 document.getElementById("name").textContent =
  CUSTOM.name;
@@ -1258,7 +1528,9 @@ document.documentElement.style.setProperty(
 );
 
 
-/* PHOTOS */
+/* ==========================================================
+   PHOTOS
+========================================================== */
 
 document.querySelectorAll(".polaroid").forEach((p,i)=>{
 
@@ -1271,16 +1543,22 @@ document.querySelectorAll(".polaroid").forEach((p,i)=>{
 });
 
 
-/* LOADER */
+/* ==========================================================
+   LOADER
+========================================================== */
 
 setTimeout(()=>{
+
  document
   .getElementById("loader")
   .classList.add("hide");
+
 },700);
 
 
-/* NAVIGATION */
+/* ==========================================================
+   NAVIGATION
+========================================================== */
 
 function go(id){
 
@@ -1293,7 +1571,9 @@ function go(id){
 }
 
 
-/* SECRET MESSAGE */
+/* ==========================================================
+   SECRET MESSAGE
+========================================================== */
 
 function reveal(){
 
@@ -1306,7 +1586,9 @@ function reveal(){
 }
 
 
-/* SURPRISE */
+/* ==========================================================
+   SURPRISE
+========================================================== */
 
 function surprise(){
 
@@ -1321,7 +1603,9 @@ function surprise(){
 }
 
 
-/* MOOD */
+/* ==========================================================
+   MOOD
+========================================================== */
 
 function mood(type){
 
@@ -1349,7 +1633,9 @@ function mood(type){
 }
 
 
-/* FLOATING HEARTS */
+/* ==========================================================
+   ORIGINAL FLOATING HEARTS
+========================================================== */
 
 function hearts(e){
 
@@ -1392,7 +1678,152 @@ function hearts(e){
 }
 
 
-/* PHOTO MODAL */
+/* ==========================================================
+   💗 CONTINUOUS FALLING HEARTS
+========================================================== */
+
+function createFallingHeart(){
+
+ const heart=
+  document.createElement("span");
+
+ heart.className=
+  "falling-heart";
+
+ heart.textContent=
+  ["♡","♥","💗","💕","✦"]
+  [Math.floor(Math.random()*5)];
+
+ heart.style.left=
+  Math.random()*100+"vw";
+
+ heart.style.fontSize=
+  (12+Math.random()*14)+"px";
+
+ heart.style.animationDuration=
+  (5+Math.random()*5)+"s";
+
+ document.body.appendChild(heart);
+
+ setTimeout(()=>{
+  heart.remove();
+ },10000);
+
+}
+
+
+/* Start falling hearts */
+
+setInterval(
+ createFallingHeart,
+ 700
+);
+
+
+/* ==========================================================
+   ✨ RANDOM SPARKLES
+========================================================== */
+
+function createSparkle(){
+
+ const sparkle=
+  document.createElement("span");
+
+ sparkle.className=
+  "sparkle";
+
+ sparkle.textContent=
+  ["✦","✧","✨","⋆"]
+  [Math.floor(Math.random()*4)];
+
+ sparkle.style.left=
+  Math.random()*100+"vw";
+
+ sparkle.style.top=
+  Math.random()*100+"vh";
+
+ document.body.appendChild(sparkle);
+
+ setTimeout(()=>{
+  sparkle.remove();
+ },1000);
+
+}
+
+
+/* Start sparkles */
+
+setInterval(
+ createSparkle,
+ 900
+);
+
+
+/* ==========================================================
+   🖱️ CUTE CURSOR TRAIL
+========================================================== */
+
+/*
+   Only enable this on devices that actually
+   have a mouse/trackpad.
+*/
+
+if(
+ window.matchMedia("(hover: hover) and (pointer: fine)").matches
+){
+
+ let lastCursorTime=0;
+
+ document.addEventListener(
+  "mousemove",
+  (e)=>{
+
+   const now=Date.now();
+
+   /*
+      Prevent creating too many elements.
+   */
+
+   if(now-lastCursorTime<80)
+    return;
+
+   lastCursorTime=now;
+
+
+   const heart=
+    document.createElement("span");
+
+   heart.className=
+    "cursor-heart";
+
+   heart.textContent=
+    ["♡","♥","✦","✧"]
+    [Math.floor(Math.random()*4)];
+
+
+   heart.style.left=
+    e.clientX+"px";
+
+   heart.style.top=
+    e.clientY+"px";
+
+
+   document.body.appendChild(heart);
+
+
+   setTimeout(()=>{
+    heart.remove();
+   },800);
+
+  }
+ );
+
+}
+
+
+/* ==========================================================
+   PHOTO MODAL
+========================================================== */
 
 function photo(el){
 
@@ -1423,10 +1854,12 @@ function closePhoto(e){
 
 /* ==========================================================
    QUIZ ENGINE
-   ========================================================== */
+========================================================== */
 
 let quizIndex=0;
+
 let quizScore=0;
+
 let quizAnswered=false;
 
 
@@ -1434,6 +1867,7 @@ function renderQuiz(){
 
  const q=
   CUSTOM.quizzes[quizIndex];
+
 
  document.getElementById("quizQuestion")
   .textContent=q.question;
@@ -1449,7 +1883,9 @@ function renderQuiz(){
 
  box.innerHTML="";
 
+
  quizAnswered=false;
+
 
  document.getElementById("nextQuiz")
   .disabled=true;
@@ -1489,8 +1925,10 @@ function chooseAnswer(i,button){
 
  quizAnswered=true;
 
+
  const q=
   CUSTOM.quizzes[quizIndex];
+
 
  const buttons=
   document.querySelectorAll(".answer");
@@ -1561,6 +1999,7 @@ function showQuizResult(){
  document.getElementById("quizGame")
   .style.display="none";
 
+
  document.getElementById("quizResult")
   .classList.add("show");
 
@@ -1591,6 +2030,7 @@ function showQuizResult(){
  document.getElementById("quizResultText")
   .textContent=result.text;
 
+
  hearts();
 
 }
@@ -1602,11 +2042,14 @@ function restartQuiz(){
 
  quizScore=0;
 
+
  document.getElementById("quizResult")
   .classList.remove("show");
 
+
  document.getElementById("quizGame")
   .style.display="block";
+
 
  renderQuiz();
 
@@ -1618,7 +2061,7 @@ renderQuiz();
 
 /* ==========================================================
    MUSIC PLAYER
-   ========================================================== */
+========================================================== */
 
 const audio=
  document.getElementById("audio");
@@ -1633,7 +2076,9 @@ function music(){
 
   audio.play()
    .then(()=>{
+
     play.textContent="Ⅱ";
+
    })
    .catch(()=>{
 
@@ -1656,7 +2101,7 @@ function music(){
 
 /* ==========================================================
    NOTE SAVING
-   ========================================================== */
+========================================================== */
 
 const note=
  document.getElementById("note");
