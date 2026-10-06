@@ -522,34 +522,70 @@ section{
 
 .gallery{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:repeat(3,minmax(0,1fr));
   gap:18px;
+  max-width:1050px;
+  margin:auto;
 }
 
 .photo-card{
-  min-height:210px;
+  position:relative;
+  aspect-ratio:4 / 5;
+  min-height:0;
+  padding:0;
 
-  padding:18px;
-
-  border-radius:24px;
-
-  background:white;
-  border:1px solid var(--line);
-
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-end;
-
+  border-radius:26px;
   overflow:hidden;
 
-  position:relative;
+  background:linear-gradient(
+    145deg,
+    rgba(230,57,80,.08),
+    rgba(61,115,232,.08)
+  );
 
-  transition:.25s;
+  border:1px solid rgba(255,255,255,.78);
+
+  cursor:pointer;
+
+  box-shadow:
+    0 16px 40px rgba(60,35,55,.08),
+    0 2px 12px rgba(61,115,232,.04);
+
+  transition:
+    transform .28s ease,
+    box-shadow .28s ease;
+}
+
+/* Featured first memory */
+.photo-card:first-child{
+  grid-column:span 2;
+  aspect-ratio:8 / 5;
+}
+
+.photo-card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+
+  background:linear-gradient(
+    to top,
+    rgba(20,18,28,.68),
+    rgba(20,18,28,.18) 52%,
+    transparent 78%
+  );
 }
 
 .photo-card:hover{
-  transform:translateY(-5px);
-  box-shadow:var(--shadow);
+  transform:translateY(-6px);
+  box-shadow:
+    0 22px 50px rgba(60,35,55,.14),
+    0 5px 18px rgba(61,115,232,.08);
+}
+
+.photo-card:active{
+  transform:scale(.98);
 }
 
 .photo-card img{
@@ -560,28 +596,121 @@ section{
   height:100%;
 
   object-fit:cover;
+
+  transition:
+    transform .5s ease,
+    filter .5s ease;
+}
+
+.photo-card:hover img{
+  transform:scale(1.045);
 }
 
 .photo-overlay{
-  position:relative;
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
   z-index:2;
 
-  padding:15px;
+  padding:20px;
 
-  border-radius:18px;
-
-  background:rgba(255,255,255,.88);
-  backdrop-filter:blur(8px);
+  color:white;
+  background:linear-gradient(
+    to top,
+    rgba(20,18,28,.72),
+    rgba(20,18,28,.24),
+    transparent
+  );
 }
 
 .photo-overlay b{
   display:block;
-  margin-bottom:4px;
+  margin-bottom:5px;
+
+  color:white;
+  font-size:15px;
+  line-height:1.3;
 }
 
 .photo-overlay span{
-  color:var(--muted);
+  display:block;
+
+  color:rgba(255,255,255,.84);
   font-size:12px;
+  line-height:1.5;
+
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+/* Empty memory cards */
+.photo-card > div[style]{
+  color:var(--blue);
+  opacity:.18 !important;
+}
+
+/* =========================
+   MEMORIES — MOBILE
+========================= */
+
+@media(max-width:800px){
+
+  .gallery{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+  }
+
+  .photo-card{
+    aspect-ratio:4 / 5;
+    border-radius:20px;
+  }
+
+  /* Keep the featured memory prominent */
+  .photo-card:first-child{
+    grid-column:1 / -1;
+    aspect-ratio:16 / 9;
+  }
+
+  .photo-overlay{
+    padding:14px;
+  }
+
+  .photo-overlay b{
+    font-size:13px;
+  }
+
+  .photo-overlay span{
+    font-size:10.5px;
+    line-height:1.4;
+  }
+
+}
+
+@media(max-width:430px){
+
+  .gallery{
+    gap:10px;
+  }
+
+  .photo-card{
+    border-radius:18px;
+  }
+
+  .photo-overlay{
+    padding:11px;
+  }
+
+  .photo-overlay b{
+    font-size:12px;
+  }
+
+  .photo-overlay span{
+    font-size:10px;
+  }
+
 }
 
 /* =========================
@@ -932,18 +1061,7 @@ section{
       rgba(230,57,80,.07),
       rgba(61,115,232,.09)
     );
-}
 
-.secret-lock-icon{
-  font-size:60px;
-  margin-bottom:12px;
-
-  animation:lockFloat 3s ease-in-out infinite;
-}
-
-@keyframes lockFloat{
-  0%,100%{
-    transform:translateY(0);
   }
 
   50%{
@@ -960,43 +1078,34 @@ section{
 .secret-questions{
   display:grid;
   gap:14px;
-
   text-align:left;
 }
 
 .secret-question{
   display:grid;
   grid-template-columns:1fr 85px;
-
   align-items:center;
   gap:15px;
-
   padding:18px;
-
   border-radius:21px;
-
   background:white;
   border:1px solid var(--line);
-
   transition:.25s;
 }
 
 .secret-question.correct{
   border-color:#78c78d;
-
   background:#f5fff7;
 }
 
 .secret-question.wrong{
   border-color:#ef8998;
-
   animation:shake .35s;
 }
 
 .secret-question b{
   display:block;
   margin-bottom:7px;
-
   color:var(--red);
   font-size:13px;
 }
@@ -1004,30 +1113,20 @@ section{
 .secret-question p{
   color:#4f4650;
   line-height:1.6;
-
   font-weight:700;
 }
 
 .secret-question input{
   width:100%;
-
   height:58px;
-
   text-align:center;
-
   border-radius:17px;
-
   border:2px solid var(--line);
-
   outline:none;
-
   background:#fff;
-
   font-size:24px;
   font-weight:900;
-
   color:var(--blue);
-
   transition:.2s;
 }
 
@@ -1043,48 +1142,31 @@ section{
 
 .secret-pin{
   margin:25px 0 10px;
-
   font-size:25px;
-
   letter-spacing:10px;
-  
-    color:var(--blue);
-
+  color:var(--blue);
   font-weight:900;
 }
 
 .secret-status{
   min-height:28px;
-
   color:var(--muted);
-
   font-size:14px;
-
   margin-bottom:15px;
 }
 
 .secret-pin-reveal{
   display:none;
-
   margin:20px auto;
-
   padding:15px 20px;
-
   width:max-content;
   max-width:100%;
-
   border-radius:18px;
-
   background:white;
-
   border:1px solid var(--line);
-
   color:var(--blue);
-
   font-weight:900;
-
   letter-spacing:3px;
-
   animation:pop .5s both;
 }
 
@@ -1094,38 +1176,28 @@ section{
 
 .secret-unlocked{
   display:none;
-
   margin-top:25px;
-
   padding:28px;
-
   border-radius:24px;
-
   background:white;
-
   border:1px solid var(--line);
-
   box-shadow:0 15px 40px rgba(60,35,55,.08);
 }
 
 .secret-unlocked.show{
   display:block;
-
   animation:pop .6s both;
 }
 
 .secret-unlocked h3{
   font-size:27px;
-
   margin-bottom:15px;
-
   background:
     linear-gradient(
       135deg,
       var(--red),
       var(--blue)
     );
-
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
@@ -1133,9 +1205,7 @@ section{
 
 .secret-unlocked p{
   color:#665967;
-
   line-height:1.9;
-
   white-space:pre-line;
 }
 
@@ -1143,9 +1213,7 @@ section{
   display:flex;
   justify-content:center;
   flex-wrap:wrap;
-
   gap:10px;
-
   margin-top:20px;
 }
 
@@ -1170,37 +1238,27 @@ section{
 .music-box{
   max-width:650px;
   margin:auto;
-
   padding:30px;
-
   border-radius:var(--r);
-
   text-align:center;
 }
 
 .music-disc{
   width:100px;
   height:100px;
-
   margin:10px auto 20px;
-
   border-radius:50%;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   background:
     linear-gradient(
       135deg,
       var(--red),
       var(--blue)
     );
-
   color:white;
-
   font-size:35px;
-
   box-shadow:0 15px 35px rgba(61,115,232,.18);
 }
 
@@ -1218,32 +1276,21 @@ section{
 .note-box{
   max-width:700px;
   margin:auto;
-
   padding:30px;
-
   border-radius:var(--r);
-
   text-align:center;
 }
 
 #noteInput{
   width:100%;
   min-height:150px;
-
   resize:vertical;
-
   margin:20px 0;
-
   padding:18px;
-
   border-radius:20px;
-
   border:1px solid var(--line);
-
   background:white;
-
   outline:none;
-
   line-height:1.7;
 }
 
@@ -1257,11 +1304,8 @@ section{
 
 footer{
   padding:60px 20px 90px;
-
   text-align:center;
-
   color:var(--muted);
-
   font-size:13px;
 }
 
@@ -1272,18 +1316,12 @@ footer{
 #modal{
   position:fixed;
   inset:0;
-
   z-index:1000;
-
   display:none;
-
   align-items:center;
   justify-content:center;
-
   padding:20px;
-
   background:rgba(20,15,25,.45);
-
   backdrop-filter:blur(10px);
 }
 
@@ -1293,37 +1331,27 @@ footer{
 
 .modal-card{
   width:min(700px,100%);
-
   max-height:90vh;
   overflow:auto;
-
   padding:25px;
-
   border-radius:28px;
-
   background:white;
-
   box-shadow:0 30px 80px rgba(20,15,25,.2);
 }
 
 .modal-card img{
   width:100%;
   max-height:65vh;
-
   object-fit:contain;
-
   border-radius:20px;
 }
 
 .modal-close{
   float:right;
-
   border:0;
   background:#f5f2f5;
-
   width:38px;
   height:38px;
-
   border-radius:50%;
 }
 
@@ -1333,13 +1361,9 @@ footer{
 
 .falling-heart{
   position:fixed;
-
   top:-30px;
-
   pointer-events:none;
-
   z-index:200;
-
   animation:fallHeart linear forwards;
 }
 
@@ -1361,11 +1385,8 @@ footer{
 
 .sparkle{
   position:fixed;
-
   pointer-events:none;
-
   z-index:201;
-
   animation:sparkleOut .8s ease-out forwards;
 }
 
@@ -1383,13 +1404,9 @@ footer{
 
 .cursor-heart{
   position:fixed;
-
   pointer-events:none;
-
   z-index:1000;
-
   font-size:13px;
-
   animation:cursorHeart .8s ease-out forwards;
 }
 
@@ -1407,14 +1424,10 @@ footer{
 
 .confetti{
   position:fixed;
-
   width:8px;
   height:14px;
-
   z-index:300;
-
   pointer-events:none;
-
   animation:confettiFall 1.8s linear forwards;
 }
 
@@ -1766,7 +1779,8 @@ body.quiet-mode .scroll-cue{
   }
 
   .gallery{
-    grid-template-columns:1fr;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
   }
 
   .timeline-item{
@@ -2098,7 +2112,7 @@ body.quiet-mode .scroll-cue{
         </button>
 
       </div>
-      
+
       <div id="moodResult">
         Your mood result will appear here.
       </div>
@@ -2633,7 +2647,7 @@ body.quiet-mode .scroll-cue{
 </div>
 
 <script>
-
+  
 /* =========================
    CUSTOM CONTENT
 ========================= */
@@ -2753,48 +2767,33 @@ const CUSTOM = {
     "That was definitely the correct answer."
   ],
 
-  /* =========================
-     SECRET ROOM SETTINGS
-  ========================= */
-
   secretQuestions:[
 
     {
       question:
         "18432 ÷ 24 + 1275 − 2042 = ?",
-
       answer:1
     },
 
     {
       question:
         "12600 ÷ 35 − 418 + 64 = ?",
-
       answer:6
     },
 
     {
       question:
         "15750 ÷ 45 − 14000 ÷ 40 = ?",
-
       answer:0
     },
 
     {
       question:
         "24000 ÷ 60 + 3456 − 3849 = ?",
-
       answer:7
     }
 
   ],
-
-  /*
-    EDIT THIS MESSAGE.
-
-    This is the message Junhii will see
-    after solving all four questions.
-  */
 
   secretRoomTitle:
     "🔓 Secret Room Unlocked!",
@@ -3041,6 +3040,7 @@ function renderModalPhoto(available){
   document.getElementById("modalImage").src=item.photo.image;
   document.getElementById("modalTitle").textContent=item.photo.title;
   document.getElementById("modalText").textContent=item.photo.text;
+
   document.getElementById("modalCounter").textContent=
     `${currentPhotoIndex+1} / ${available.length}`;
 
@@ -3058,6 +3058,7 @@ function changePhoto(direction){
     (currentPhotoIndex+direction+available.length)%available.length;
 
   renderModalPhoto(available);
+
   SFX.click();
 
 }
@@ -3092,13 +3093,13 @@ const moodMessages={
     "Go drink some water and maybe sleep. 😴",
 
   chaotic:
-    "Excellent. Absolutely no further questions. 🤡",
+    "Chaos detected. Proceed with caution. 🤡",
 
   hungry:
-    "This website recommends food. Immediately. 🍕",
+    "Pizza solves approximately 73% of problems. 🍕",
 
   mysterious:
-    "Interesting... you definitely look suspicious. 👀"
+    "Something suspicious is definitely happening. 👀"
 
 };
 
@@ -3106,7 +3107,9 @@ function setMood(mood){
 
   document
     .getElementById("moodResult")
-    .textContent=moodMessages[mood];
+    .textContent =
+      moodMessages[mood] ||
+      "Interesting choice. 👀";
 
   SFX.click();
 
@@ -3120,8 +3123,18 @@ function setMood(mood){
 function magic(){
 
   createSparkles();
+  createHearts();
 
-  createConfetti();
+  const orb =
+    document.querySelector(".magic-orb");
+
+  orb.style.transform="scale(1.18)";
+
+  setTimeout(()=>{
+
+    orb.style.transform="";
+
+  },300);
 
   SFX.success();
 
@@ -3132,7 +3145,7 @@ function magic(){
    SURPRISE
 ========================= */
 
-let surpriseIndex=Number(localStorage.getItem("junhii_surprise_index")||0);
+let surpriseIndex=0;
 
 function openGift(){
 
@@ -3141,17 +3154,19 @@ function openGift(){
 
   gift.classList.add("open");
 
+  const text =
+    CUSTOM.surprises[
+      surpriseIndex %
+      CUSTOM.surprises.length
+    ];
+
   document
     .getElementById("surpriseText")
-    .textContent =
-      CUSTOM.surprises[
-        surpriseIndex %
-        CUSTOM.surprises.length
-      ];
-  
-  surpriseIndex++;
-  localStorage.setItem("junhii_surprise_index",String(surpriseIndex));
+    .textContent=text;
 
+  surpriseIndex++;
+
+  createConfetti();
   createHearts();
 
   SFX.success();
@@ -3163,20 +3178,34 @@ function openGift(){
    MINI GAME
 ========================= */
 
-let gameRunning=false;
 let score=0;
-let gameTimer;
-let gameTick;
-let gameCountdownTimer;
-let gameCombo=0;
-let bestScore=Number(localStorage.getItem("junhii_best_score")||0);
+let bestScore=
+  Number(
+    localStorage.getItem(
+      "junhii_best_score"
+    ) || 0
+  );
 
-document.getElementById("bestScore").textContent=bestScore;
+let gameRunning=false;
+let gameTimer=null;
+let gameTick=null;
+let gameCountdownTimer=null;
+let gameCombo=0;
+
+document.getElementById("bestScore").textContent =
+  bestScore;
 
 function updateGameHud(timeLeft=15){
-  document.getElementById("score").textContent=score;
-  document.getElementById("bestScore").textContent=bestScore;
-  document.getElementById("gameTime").textContent=`${Math.max(0,timeLeft).toFixed(1)}s`;
+
+  document.getElementById("score").textContent =
+    score;
+
+  document.getElementById("bestScore").textContent =
+    bestScore;
+
+  document.getElementById("gameTime").textContent =
+    `${Math.max(0,timeLeft).toFixed(1)}s`;
+
 }
 
 function startGame(){
@@ -3184,107 +3213,243 @@ function startGame(){
   if(gameRunning)return;
 
   gameRunning=true;
+
   score=0;
   gameCombo=0;
 
-  const area=document.getElementById("gameArea");
-  const message=document.getElementById("gameMessage");
-  const startButton=document.getElementById("gameStartButton");
+  const area =
+    document.getElementById("gameArea");
+
+  const message =
+    document.getElementById("gameMessage");
+
+  const startButton =
+    document.getElementById(
+      "gameStartButton"
+    );
 
   area.innerHTML="";
+
   clearTimeout(gameTimer);
   clearInterval(gameTick);
   clearInterval(gameCountdownTimer);
 
   startButton.disabled=true;
   startButton.textContent="Get ready…";
-  message.textContent="3… 2… 1… 💙";
+
+  message.textContent=
+    "3… 2… 1… 💙";
+
   updateGameHud(15);
 
   let count=3;
-  const countdown=document.createElement("div");
-  countdown.className="game-countdown";
+
+  const countdown =
+    document.createElement("div");
+
+  countdown.className=
+    "game-countdown";
+
   countdown.textContent=count;
+
   area.appendChild(countdown);
 
   gameCountdownTimer=setInterval(()=>{
+
     count--;
+
     if(count>0){
+
       countdown.textContent=count;
+
     }else{
-      clearInterval(gameCountdownTimer);
+
+      clearInterval(
+        gameCountdownTimer
+      );
+
       countdown.remove();
+
       startButton.disabled=false;
-      startButton.textContent="Restart game";
-      message.textContent="Catch them! Combo: 0 🔥";
+
+      startButton.textContent=
+        "Restart game";
+
+      message.textContent=
+        "Catch them! Combo: 0 🔥";
+
       runHeartGame();
+
     }
+
   },700);
 
 }
 
 function runHeartGame(){
 
-  const area=document.getElementById("gameArea");
+  const area =
+    document.getElementById("gameArea");
+
   const startTime=Date.now();
-  const endTime=startTime+15000;
+
+  const endTime=
+    startTime+15000;
 
   function finishGame(){
+
     gameRunning=false;
+
     clearInterval(gameTick);
     clearTimeout(gameTimer);
 
-    const newBest=score>bestScore;
+    const newBest =
+      score>bestScore;
+
     if(newBest){
+
       bestScore=score;
-      localStorage.setItem("junhii_best_score",String(bestScore));
+
+      localStorage.setItem(
+        "junhii_best_score",
+        String(bestScore)
+      );
+
     }
 
     updateGameHud(0);
-    document.getElementById("gameMessage").textContent=
-      newBest ? `New best score! ${score} 🎉` : `Time's up! Score: ${score} 🎉`;
 
-    area.innerHTML=`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--muted);font-size:18px">${newBest ? "🏆 New record!" : "Round complete! 💕"}</div>`;
+    document
+      .getElementById("gameMessage")
+      .textContent =
+        newBest
+          ? `New best score! ${score} 🎉`
+          : `Time's up! Score: ${score} 🎉`;
+
+    area.innerHTML=`
+
+      <div
+        style="
+          position:absolute;
+          inset:0;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-weight:900;
+          color:var(--muted);
+          font-size:18px
+        "
+      >
+        ${
+          newBest
+            ? "🏆 New record!"
+            : "Round complete! 💕"
+        }
+      </div>
+
+    `;
+
     createConfetti();
+
     SFX.success();
+
   }
 
   function spawn(){
-    if(!gameRunning)return;
-    if(Date.now()>=endTime){ finishGame(); return; }
 
-    const heart=document.createElement("button");
-    heart.className="game-heart";
-    heart.textContent=Math.random()>.5 ? "❤️" : "💙";
-    const size=24+Math.random()*22;
-    heart.style.fontSize=size+"px";
-    heart.style.left=Math.random()*88+"%";
-    heart.style.top=Math.random()*82+"%";
+    if(!gameRunning)return;
+
+    if(Date.now()>=endTime){
+
+      finishGame();
+      return;
+
+    }
+
+    const heart =
+      document.createElement("button");
+
+    heart.className=
+      "game-heart";
+
+    heart.textContent =
+      Math.random()>.5
+        ? "❤️"
+        : "💙";
+
+    const size =
+      24+Math.random()*22;
+
+    heart.style.fontSize=
+      size+"px";
+
+    heart.style.left=
+      Math.random()*88+"%";
+
+    heart.style.top=
+      Math.random()*82+"%";
 
     heart.onclick=()=>{
+
       if(!gameRunning)return;
+
       score++;
       gameCombo++;
-      updateGameHud((endTime-Date.now())/1000);
-      document.getElementById("gameMessage").textContent=`Combo: ${gameCombo} 🔥`;
+
+      updateGameHud(
+        (endTime-Date.now())/1000
+      );
+
+      document
+        .getElementById("gameMessage")
+        .textContent =
+          `Combo: ${gameCombo} 🔥`;
+
       heart.remove();
+
       SFX.click();
+
     };
 
     area.appendChild(heart);
 
-    setTimeout(()=>{ if(heart.parentNode)heart.remove(); },1400);
-    setTimeout(spawn,430);
+    setTimeout(()=>{
+
+      if(heart.parentNode)
+        heart.remove();
+
+    },1400);
+
+    setTimeout(
+      spawn,
+      430
+    );
+
   }
 
   gameTick=setInterval(()=>{
-    const left=Math.max(0,(endTime-Date.now())/1000);
+
+    const left =
+      Math.max(
+        0,
+        (endTime-Date.now())/1000
+      );
+
     updateGameHud(left);
-    if(left<=0)finishGame();
+
+    if(left<=0)
+      finishGame();
+
   },100);
 
-  gameTimer=setTimeout(finishGame,15050);
+  gameTimer=
+    setTimeout(
+      finishGame,
+      15050
+    );
+
   spawn();
+
 }
 
 
@@ -3295,81 +3460,229 @@ function runHeartGame(){
 let quizIndex=0;
 let quizScore=0;
 let quizLocked=false;
-let quizBest=Number(localStorage.getItem("junhii_quiz_best")||0);
 
-const quizQuestion=document.getElementById("quizQuestion");
-const quizOptions=document.getElementById("quizOptions");
-const quizResult=document.getElementById("quizResult");
-const quizProgressText=document.getElementById("quizProgressText");
-const quizProgressBar=document.getElementById("quizProgressBar");
-const quizScoreText=document.getElementById("quizScoreText");
+let quizBest =
+  Number(
+    localStorage.getItem(
+      "junhii_quiz_best"
+    ) || 0
+  );
+
+const quizQuestion =
+  document.getElementById(
+    "quizQuestion"
+  );
+
+const quizOptions =
+  document.getElementById(
+    "quizOptions"
+  );
+
+const quizResult =
+  document.getElementById(
+    "quizResult"
+  );
+
+const quizProgressText =
+  document.getElementById(
+    "quizProgressText"
+  );
+
+const quizProgressBar =
+  document.getElementById(
+    "quizProgressBar"
+  );
+
+const quizScoreText =
+  document.getElementById(
+    "quizScoreText"
+  );
 
 function updateQuizHeader(){
-  const total=CUSTOM.quizzes.length;
-  quizProgressText.textContent=`Question ${Math.min(quizIndex+1,total)} / ${total}`;
-  quizProgressBar.style.width=`${(quizIndex/total)*100}%`;
-  quizScoreText.textContent=`Score: ${quizScore}`;
+
+  const total=
+    CUSTOM.quizzes.length;
+
+  quizProgressText.textContent=
+    `Question ${Math.min(
+      quizIndex+1,
+      total
+    )} / ${total}`;
+
+  quizProgressBar.style.width=
+    `${(quizIndex/total)*100}%`;
+
+  quizScoreText.textContent=
+    `Score: ${quizScore}`;
+
 }
 
 function renderQuiz(){
 
-  const quiz=CUSTOM.quizzes[quizIndex];
+  const quiz=
+    CUSTOM.quizzes[quizIndex];
+
   if(!quiz)return;
 
   quizLocked=false;
+
   updateQuizHeader();
-  quizQuestion.textContent=quiz.question;
+
+  quizQuestion.textContent=
+    quiz.question;
+
   quizOptions.innerHTML="";
+
   quizResult.textContent="";
 
-  quiz.options.forEach((option,index)=>{
+  quiz.options.forEach(
+    (option,index)=>{
 
-    const button=document.createElement("button");
-    button.textContent=option;
+      const button =
+        document.createElement(
+          "button"
+        );
 
-    button.onclick=()=>{
-      if(quizLocked)return;
+      button.textContent=
+        option;
 
-      if(index===quiz.answer){
-        quizLocked=true;
-        button.classList.add("correct-option");
-        quizScore++;
-        updateQuizHeader();
-        quizResult.textContent=CUSTOM.quizResults[quizIndex % CUSTOM.quizResults.length];
-        SFX.success();
+      button.onclick=()=>{
 
-        setTimeout(()=>{
-          quizIndex++;
-          if(quizIndex>=CUSTOM.quizzes.length){
-            const completedScore=quizScore;
-            if(completedScore>quizBest){
-              quizBest=completedScore;
-              localStorage.setItem("junhii_quiz_best",String(quizBest));
-            }
-            quizProgressBar.style.width="100%";
-            quizQuestion.innerHTML="Quiz complete! 🎉";
-            quizOptions.innerHTML=`<div class="quiz-finished"><strong>${completedScore} / ${CUSTOM.quizzes.length}</strong><span>Your best score: ${quizBest}</span></div><button class="btn blue" id="quizAgainButton" style="margin-top:16px;width:100%">Play again ↻</button>`;
-            quizResult.textContent="You made it through all the questions! 💙";
-            document.getElementById("quizAgainButton").onclick=()=>{
-              quizIndex=0;
-              quizScore=0;
+        if(quizLocked)return;
+
+        if(index===quiz.answer){
+
+          quizLocked=true;
+
+          button.classList.add(
+            "correct-option"
+          );
+
+          quizScore++;
+
+          updateQuizHeader();
+
+          quizResult.textContent=
+            CUSTOM.quizResults[
+              quizIndex %
+              CUSTOM.quizResults.length
+            ];
+
+          SFX.success();
+
+          setTimeout(()=>{
+
+            quizIndex++;
+
+            if(
+              quizIndex >=
+              CUSTOM.quizzes.length
+            ){
+
+              const completedScore=
+                quizScore;
+
+              if(
+                completedScore >
+                quizBest
+              ){
+
+                quizBest=
+                  completedScore;
+
+                localStorage.setItem(
+                  "junhii_quiz_best",
+                  String(quizBest)
+                );
+
+              }
+
+              quizProgressBar.style.width=
+                "100%";
+
+              quizQuestion.innerHTML=
+                "Quiz complete! 🎉";
+
+              quizOptions.innerHTML="";
+
+              quizResult.innerHTML=`
+
+                <div class="quiz-finished">
+
+                  <strong>
+                    ${completedScore} / ${CUSTOM.quizzes.length}
+                  </strong>
+
+                  <div>
+                    Best score:
+                    ${quizBest}
+                  </div>
+
+                  <br>
+
+                  <button
+                    class="btn blue"
+                    onclick="restartQuiz()"
+                  >
+                    Play again
+                  </button>
+
+                </div>
+
+              `;
+
+              SFX.success();
+
+            }else{
+
               renderQuiz();
-            };
-          }else{
-            renderQuiz();
-          }
-        },900);
 
-      }else{
-        button.classList.add("wrong-option");
-        quizResult.textContent="Not quite 👀 Try again.";
-        SFX.wrong();
-        setTimeout(()=>button.classList.remove("wrong-option"),400);
-      }
-    };
+            }
 
-    quizOptions.appendChild(button);
-  });
+          },700);
+
+        }else{
+
+          button.classList.add(
+            "wrong-option"
+          );
+
+          quizResult.textContent=
+            "Nope 😂 Try again.";
+
+          SFX.wrong();
+
+          setTimeout(()=>{
+
+            button.classList.remove(
+              "wrong-option"
+            );
+
+          },450);
+
+        }
+
+      };
+
+      quizOptions.appendChild(
+        button
+      );
+
+    }
+  );
+
+}
+
+function restartQuiz(){
+
+  quizIndex=0;
+  quizScore=0;
+  quizLocked=false;
+
+  renderQuiz();
+
+  SFX.click();
+
 }
 
 renderQuiz();
@@ -3379,16 +3692,16 @@ renderQuiz();
    SECRET ROOM
 ========================= */
 
-const secretQuestionsBox =
-  document.getElementById(
-    "secretQuestions"
-  );
-
 const secretAnswers=[];
 
 function renderSecretRoom(){
 
-  secretQuestionsBox.innerHTML="";
+  const box =
+    document.getElementById(
+      "secretQuestions"
+    );
+
+  box.innerHTML="";
 
   CUSTOM.secretQuestions.forEach(
     (item,index)=>{
@@ -3414,10 +3727,11 @@ function renderSecretRoom(){
         </div>
 
         <input
-          type="text"
+          type="number"
           inputmode="numeric"
+          min="0"
+          max="9"
           maxlength="1"
-          autocomplete="off"
           aria-label="Answer ${index+1}"
         >
 
@@ -3429,119 +3743,88 @@ function renderSecretRoom(){
       input.addEventListener(
         "input",
         ()=>{
-          checkSecretAnswer(
-            index,
-            input,
-            row
-          );
-        }
-      );
 
-      input.addEventListener(
-        "keydown",
-        event=>{
+          const value =
+            input.value.trim();
 
-          if(event.key==="Enter"){
+          if(
+            value ===
+            String(item.answer)
+          ){
 
-            checkSecretAnswer(
-              index,
-              input,
-              row
+            secretAnswers[index]=
+              item.answer;
+
+            row.classList.remove(
+              "wrong"
             );
+
+            row.classList.add(
+              "correct"
+            );
+
+            input.disabled=true;
+
+            updateSecretPin();
+
+            SFX.success();
+
+            if(
+              secretAnswers.filter(
+                value=>value!==undefined
+              ).length ===
+              CUSTOM.secretQuestions.length
+            ){
+
+              prepareSecretUnlock();
+
+            }
+
+          }else{
+
+            row.classList.remove(
+              "correct"
+            );
+
+            row.classList.add(
+              "wrong"
+            );
+
+            document
+              .getElementById(
+                "secretStatus"
+              )
+              .textContent =
+                `Question ${index+1}: not quite. Try again 👀`;
+
+            SFX.wrong();
+
+            setTimeout(()=>{
+
+              row.classList.remove(
+                "wrong"
+              );
+
+            },400);
+
+            setTimeout(()=>{
+
+              input.value="";
+              input.focus();
+
+            },250);
 
           }
 
         }
       );
 
-      secretQuestionsBox.appendChild(row);
+      box.appendChild(row);
 
     }
   );
 
-}
-
-function checkSecretAnswer(
-  index,
-  input,
-  row
-){
-
-  const value =
-    input.value.trim();
-
-  if(!/^\d$/.test(value)){
-
-    input.value="";
-
-    return;
-
-  }
-
-  const correct =
-    Number(value) ===
-    Number(
-      CUSTOM
-        .secretQuestions[index]
-        .answer
-    );
-
-  if(correct){
-
-    row.classList.remove("wrong");
-
-    row.classList.add("correct");
-
-    input.disabled=true;
-
-    secretAnswers[index]=value;
-
-    updateSecretPin();
-
-    SFX.success();
-
-    const solved =
-      secretAnswers.filter(
-        value=>value!==undefined
-      ).length;
-
-    if(
-      solved ===
-      CUSTOM.secretQuestions.length
-    ){
-
-      prepareSecretUnlock();
-
-    }
-
-  }else{
-
-    row.classList.remove("correct");
-
-    row.classList.add("wrong");
-
-    document
-      .getElementById("secretStatus")
-      .textContent =
-      `Question ${index+1}: not quite. Try again 👀`;
-
-    SFX.wrong();
-
-    setTimeout(()=>{
-
-      row.classList.remove("wrong");
-
-    },400);
-
-    setTimeout(()=>{
-
-      input.value="";
-
-      input.focus();
-
-    },250);
-
-  }
+  updateSecretPin();
 
 }
 
@@ -3557,14 +3840,17 @@ function updateSecretPin(){
 
   document
     .getElementById("pinDots")
-    .textContent=
+    .textContent =
       dots.join(" ");
 
 }
 
 function prepareSecretUnlock(){
 
-  localStorage.setItem("junhii_secret_solved","1");
+  localStorage.setItem(
+    "junhii_secret_solved",
+    "1"
+  );
 
   const pin =
     secretAnswers.join("");
@@ -3579,14 +3865,17 @@ function prepareSecretUnlock(){
       "secretPinReveal"
     );
 
-  revealBox.textContent =
+  revealBox.textContent=
     "PIN: " + pin;
 
   revealBox.classList.add("show");
 
   document
-    .getElementById("unlockSecretButton")
-    .style.display="inline-block";
+    .getElementById(
+      "unlockSecretButton"
+    )
+    .style.display=
+      "inline-block";
 
   createConfetti();
 
@@ -3611,27 +3900,40 @@ function unlockSecretRoom(){
   }
 
   document
-    .getElementById("secretRoomTitle")
+    .getElementById(
+      "secretRoomTitle"
+    )
     .textContent =
       CUSTOM.secretRoomTitle;
 
   document
-    .getElementById("secretRoomMessage")
+    .getElementById(
+      "secretRoomMessage"
+    )
     .textContent =
       CUSTOM.secretRoomMessage;
 
   document
-    .getElementById("secretUnlocked")
+    .getElementById(
+      "secretUnlocked"
+    )
     .classList.add("show");
 
   document
-    .querySelector(".secret-lock-icon")
+    .querySelector(
+      ".secret-lock-icon"
+    )
     .classList.add("unlocked");
 
-  localStorage.setItem("junhii_secret_unlocked","1");
+  localStorage.setItem(
+    "junhii_secret_unlocked",
+    "1"
+  );
 
   document
-    .getElementById("secretStatus")
+    .getElementById(
+      "secretStatus"
+    )
     .textContent =
       "PIN accepted. Welcome to the Secret Room. 🔓";
 
@@ -3646,11 +3948,15 @@ function unlockSecretRoom(){
 function lockSecretRoom(){
 
   document
-    .getElementById("secretUnlocked")
+    .getElementById(
+      "secretUnlocked"
+    )
     .classList.remove("show");
 
   document
-    .getElementById("secretStatus")
+    .getElementById(
+      "secretStatus"
+    )
     .textContent =
       "The Secret Room is locked again. 🔒";
 
@@ -3693,11 +3999,18 @@ function resetSecretRoom(){
     .classList.remove("show");
 
   document
-    .querySelector(".secret-lock-icon")
+    .querySelector(
+      ".secret-lock-icon"
+    )
     .classList.remove("unlocked");
 
-  localStorage.removeItem("junhii_secret_unlocked");
-  localStorage.removeItem("junhii_secret_solved");
+  localStorage.removeItem(
+    "junhii_secret_unlocked"
+  );
+
+  localStorage.removeItem(
+    "junhii_secret_solved"
+  );
 
   document
     .getElementById(
@@ -3724,22 +4037,72 @@ function resetSecretRoom(){
 
 }
 
-document.addEventListener("keydown",event=>{
-  if(!document.getElementById("modal").classList.contains("show"))return;
-  if(event.key==="ArrowLeft")changePhoto(-1);
-  if(event.key==="ArrowRight")changePhoto(1);
-  if(event.key==="Escape")closeModal();
-});
+document.addEventListener(
+  "keydown",
+  event=>{
+
+    if(
+      !document
+        .getElementById("modal")
+        .classList
+        .contains("show")
+    )return;
+
+    if(event.key==="ArrowLeft")
+      changePhoto(-1);
+
+    if(event.key==="ArrowRight")
+      changePhoto(1);
+
+    if(event.key==="Escape")
+      closeModal();
+
+  }
+);
 
 renderSecretRoom();
-if(localStorage.getItem("junhii_secret_unlocked")==="1"){
-  document.getElementById("secretRoomTitle").textContent=CUSTOM.secretRoomTitle;
-  document.getElementById("secretRoomMessage").textContent=CUSTOM.secretRoomMessage;
-  document.getElementById("secretUnlocked").classList.add("show");
-  document.querySelector(".secret-lock-icon").classList.add("unlocked");
-  document.getElementById("secretStatus").textContent="Secret Room saved on this browser. 🔓";
-}
 
+if(
+  localStorage.getItem(
+    "junhii_secret_unlocked"
+  )==="1"
+){
+
+  document
+    .getElementById(
+      "secretRoomTitle"
+    )
+    .textContent =
+      CUSTOM.secretRoomTitle;
+
+  document
+    .getElementById(
+      "secretRoomMessage"
+    )
+    .textContent =
+      CUSTOM.secretRoomMessage;
+
+  document
+    .getElementById(
+      "secretUnlocked"
+    )
+    .classList.add("show");
+
+  document
+    .querySelector(
+      ".secret-lock-icon"
+    )
+    .classList.add("unlocked");
+
+  document
+    .getElementById(
+      "secretStatus"
+    )
+    .textContent =
+      "Secret Room saved on this browser. 🔓";
+
+}
+  
 /* =========================
    MUSIC
 ========================= */
@@ -3831,26 +4194,63 @@ function saveNote(){
    QUIET MODE
 ========================= */
 
-let quietMode=localStorage.getItem("junhii_quiet_mode")==="1";
+let quietMode=
+  localStorage.getItem(
+    "junhii_quiet_mode"
+  )==="1";
 
 function applyQuietMode(){
-  document.body.classList.toggle("quiet-mode",quietMode);
-  const button=document.getElementById("quietButton");
+
+  document.body.classList.toggle(
+    "quiet-mode",
+    quietMode
+  );
+
+  const button=
+    document.getElementById(
+      "quietButton"
+    );
+
   if(button){
-    button.classList.toggle("active",quietMode);
-    button.textContent=quietMode ? "☀️" : "🌙";
-    button.title=quietMode ? "Turn effects back on" : "Quiet mode";
+
+    button.classList.toggle(
+      "active",
+      quietMode
+    );
+
+    button.textContent=
+      quietMode
+        ? "☀️"
+        : "🌙";
+
+    button.title=
+      quietMode
+        ? "Turn effects back on"
+        : "Quiet mode";
+
   }
+
 }
 
 function toggleQuietMode(){
+
   quietMode=!quietMode;
-  localStorage.setItem("junhii_quiet_mode",quietMode ? "1" : "0");
+
+  localStorage.setItem(
+    "junhii_quiet_mode",
+    quietMode
+      ? "1"
+      : "0"
+  );
+
   applyQuietMode();
+
   SFX.click();
+
 }
 
 applyQuietMode();
+
 
 /* =========================
    HEARTS
@@ -3890,7 +4290,9 @@ function createHearts(
     heart.style.animationDelay=
       Math.random()*1.5+"s";
 
-    document.body.appendChild(heart);
+    document.body.appendChild(
+      heart
+    );
 
     setTimeout(()=>{
 
@@ -3932,7 +4334,9 @@ function createSparkles(){
     sparkle.style.fontSize=
       (10+Math.random()*20)+"px";
 
-    document.body.appendChild(sparkle);
+    document.body.appendChild(
+      sparkle
+    );
 
     setTimeout(()=>{
 
@@ -3959,7 +4363,9 @@ document.addEventListener(
 
     const now=Date.now();
 
-    if(now-cursorTimer<90)return;
+    if(
+      now-cursorTimer<90
+    )return;
 
     cursorTimer=now;
 
@@ -3980,7 +4386,9 @@ document.addEventListener(
     heart.style.top=
       event.clientY+"px";
 
-    document.body.appendChild(heart);
+    document.body.appendChild(
+      heart
+    );
 
     setTimeout(()=>{
 
@@ -4024,7 +4432,9 @@ function createConfetti(){
         ? CUSTOM.colors.red
         : CUSTOM.colors.blue;
 
-    document.body.appendChild(piece);
+    document.body.appendChild(
+      piece
+    );
 
     setTimeout(()=>{
 
@@ -4101,7 +4511,9 @@ const SFX={
 
     oscillator.connect(gain);
 
-    gain.connect(this.ctx.destination);
+    gain.connect(
+      this.ctx.destination
+    );
 
     oscillator.start();
 
