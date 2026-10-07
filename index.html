@@ -5807,11 +5807,6 @@ let bearStealTimer=null;
 const MAX_BEAR_STEALS=7;
 let bearStealCount=0;
 
-/*
-   Remember which viewport Bear has already visited.
-   Bear will not steal again from the same viewport
-   after the stolen button is returned.
-*/
 const bearVisitedViewports=new Set();
 
 function getBearViewport(){
@@ -5821,65 +5816,76 @@ function getBearViewport(){
   );
 }
 
-
-/* =========================
-   FIND VISIBLE BUTTONS
-========================= */
-
 function getBearButtons(){
 
-  const buttons=[
+  return [
     ...document.querySelectorAll(
       ".btn, .os-app, .moods button"
     )
-  ];
-
-  return buttons.filter(button=>{
+  ].filter(button=>{
 
     if(!button)return false;
-
     if(button.disabled)return false;
 
-    if(button.classList.contains("bear-stolen")){
+    if(
+      button.classList.contains(
+        "bear-stolen"
+      )
+    ){
       return false;
     }
 
-    if(button.dataset.bearLocked==="1"){
-      return false;
-    }
-
-    if(button.closest("#bearThief")){
+    if(
+      button.closest("#bearThief")
+    ){
       return false;
     }
 
     const r=
       button.getBoundingClientRect();
 
-    if(r.width<20 || r.height<20){
+    if(
+      r.width<20 ||
+      r.height<20
+    ){
       return false;
     }
 
     const visibleWidth=
       Math.max(
         0,
-        Math.min(r.right,window.innerWidth)
+        Math.min(
+          r.right,
+          window.innerWidth
+        )
         -
-        Math.max(r.left,0)
+        Math.max(
+          r.left,
+          0
+        )
       );
 
     const visibleHeight=
       Math.max(
         0,
-        Math.min(r.bottom,window.innerHeight)
+        Math.min(
+          r.bottom,
+          window.innerHeight
+        )
         -
-        Math.max(r.top,0)
+        Math.max(
+          r.top,
+          0
+        )
       );
 
     const visibleArea=
-      visibleWidth*visibleHeight;
+      visibleWidth*
+      visibleHeight;
 
     const totalArea=
-      r.width*r.height;
+      r.width*
+      r.height;
 
     if(
       visibleArea<=0 ||
@@ -5889,15 +5895,8 @@ function getBearButtons(){
     }
 
     return true;
-
   });
-
 }
-
-
-/* =========================
-   PICK A BUTTON
-========================= */
 
 function pickVisibleBearButton(){
 
@@ -5907,11 +5906,6 @@ function pickVisibleBearButton(){
   if(!buttons.length){
     return null;
   }
-
-  /*
-     Prefer buttons around the middle
-     of the current screen.
-  */
 
   const cx=
     window.innerWidth/2;
@@ -5925,10 +5919,12 @@ function pickVisibleBearButton(){
       button.getBoundingClientRect();
 
     const bx=
-      r.left+r.width/2;
+      r.left+
+      r.width/2;
 
     const by=
-      r.top+r.height/2;
+      r.top+
+      r.height/2;
 
     button.dataset.bearDistance=
       Math.hypot(
@@ -5940,9 +5936,13 @@ function pickVisibleBearButton(){
 
   buttons.sort(
     (a,b)=>
-      Number(a.dataset.bearDistance)
+      Number(
+        a.dataset.bearDistance
+      )
       -
-      Number(b.dataset.bearDistance)
+      Number(
+        b.dataset.bearDistance
+      )
   );
 
   const best=
@@ -5952,27 +5952,25 @@ function pickVisibleBearButton(){
 
   const choices=
     buttons.filter(button=>
-      Number(button.dataset.bearDistance)
+      Number(
+        button.dataset.bearDistance
+      )
       <=
       best+170
     );
 
   return choices[
     Math.floor(
-      Math.random()*choices.length
+      Math.random()*
+      choices.length
     )
   ];
 }
 
-
-/* =========================
-   MOVE BEAR
-========================= */
-
 function moveBearTo(
   x,
   y,
-  duration=.55
+  duration=.7
 ){
 
   const maxX=
@@ -5984,19 +5982,25 @@ function moveBearTo(
   const maxY=
     Math.max(
       75,
-      window.innerHeight-100
+      window.innerHeight-105
     );
 
   x=
     Math.max(
       8,
-      Math.min(x,maxX)
+      Math.min(
+        x,
+        maxX
+      )
     );
 
   y=
     Math.max(
       75,
-      Math.min(y,maxY)
+      Math.min(
+        y,
+        maxY
+      )
     );
 
   const oldX=
@@ -6022,11 +6026,6 @@ function moveBearTo(
   bearThief.style.top=
     `${y}px`;
 }
-
-
-/* =========================
-   COPY BUTTON LOOK
-========================= */
 
 function setBearItemFromButton(button){
 
@@ -6084,62 +6083,6 @@ function setBearItemFromButton(button){
     "5px 9px";
 }
 
-
-/* =========================
-   LOCK TARGET IMMEDIATELY
-========================= */
-
-function lockBearTarget(button){
-
-  if(!button)return;
-
-  /*
-     Save its original inline
-     pointer-events value.
-  */
-
-  button.dataset.bearOriginalPointerEvents=
-    button.style.pointerEvents;
-
-  /*
-     Mark it as locked immediately.
-     This happens BEFORE Bear starts moving.
-  */
-
-  button.dataset.bearLocked="1";
-
-  /*
-     Stop normal pointer/touch
-     interaction with the button.
-  */
-
-  button.style.pointerEvents=
-    "none";
-}
-
-
-/* =========================
-   UNLOCK TARGET
-========================= */
-
-function unlockBearTarget(button){
-
-  if(!button)return;
-
-  button.style.pointerEvents=
-    button.dataset.bearOriginalPointerEvents||
-    "";
-
-  delete button.dataset.bearOriginalPointerEvents;
-
-  delete button.dataset.bearLocked;
-}
-
-
-/* =========================
-   BEAR RUNS AWAY
-========================= */
-
 function moveBearAway(){
 
   if(!bearBusy)return;
@@ -6156,76 +6099,67 @@ function moveBearAway(){
       window.innerHeight/2
     );
 
-  /*
-     Keep Bear INSIDE the screen.
-  */
-
-  const goLeft=
-    Math.random()<.5;
-
-  const minX=20;
+  const minX=10;
   const maxX=
     Math.max(
-      20,
-      window.innerWidth-100
+      10,
+      window.innerWidth-88
+    );
+
+  const minY=75;
+  const maxY=
+    Math.max(
+      75,
+      window.innerHeight-105
     );
 
   let x;
+  let y;
 
-  if(goLeft){
+  /*
+    Move Bear only a short distance away.
+    He NEVER leaves the current viewport.
+  */
+
+  if(
+    currentX<
+    window.innerWidth/2
+  ){
 
     x=
-      Math.max(
-        minX,
-        currentX-
-        (120+Math.random()*180)
-      );
+      currentX+
+      150+
+      Math.random()*100;
 
   }else{
 
     x=
-      Math.min(
-        maxX,
-        currentX+
-        (120+Math.random()*180)
-      );
-
+      currentX-
+      150-
+      Math.random()*100;
   }
 
-  /*
-     If Bear is already near an edge,
-     move toward the opposite side.
-  */
+  y=
+    currentY+
+    (
+      Math.random()-.5
+    )*140;
 
-  if(currentX<100){
-
-    x=
-      Math.min(
-        maxX,
-        currentX+
-        (180+Math.random()*160)
-      );
-
-  }
-
-  if(currentX>window.innerWidth-180){
-
-    x=
-      Math.max(
-        minX,
-        currentX-
-        (180+Math.random()*160)
-      );
-
-  }
-
-  const y=
+  x=
     Math.max(
-      80,
+      minX,
       Math.min(
-        currentY+
-        (Math.random()-.5)*160,
-        window.innerHeight-105
+        x,
+        maxX
+      )
+    );
+
+  y=
+    Math.max(
+      minY,
+      Math.min(
+        y,
+        maxY
       )
     );
 
@@ -6236,8 +6170,13 @@ function moveBearAway(){
   moveBearTo(
     x,
     y,
-    .48
+    .55
   );
+
+  /*
+    Keep Bear visible after he reaches
+    the hiding position.
+  */
 
   clearTimeout(
     bearMoveTimer
@@ -6248,48 +6187,32 @@ function moveBearAway(){
 
       if(!bearBusy)return;
 
-      /*
-         Bear stays visible.
-         Do NOT hide it.
-      */
-
-      bearThief.classList.add(
+      bearThief.classList.remove(
         "running"
       );
 
-    },520);
+    },650);
 }
-
-
-/* =========================
-   STEAL BUTTON
-========================= */
 
 function stealBearButton(){
 
   if(
     quietMode||
     bearBusy||
-    bearStealCount>=MAX_BEAR_STEALS
+    bearStealCount>=
+    MAX_BEAR_STEALS
   ){
-
     return;
   }
 
   const viewport=
     getBearViewport();
 
-  /*
-     Do not steal another button
-     from the same viewport.
-  */
-
   if(
     bearVisitedViewports.has(
       viewport
     )
   ){
-
     return;
   }
 
@@ -6299,6 +6222,7 @@ function stealBearButton(){
   if(!target){
 
     scheduleBear();
+
     return;
   }
 
@@ -6313,24 +6237,9 @@ function stealBearButton(){
   ){
 
     scheduleBear();
+
     return;
   }
-
-
-  /* =========================
-     LOCK FIRST
-  ========================= */
-
-  /*
-     THIS HAPPENS BEFORE BEAR
-     EVEN STARTS MOVING.
-
-     So the user cannot click
-     this button while Bear is
-     coming toward it.
-  */
-
-  lockBearTarget(target);
 
   bearTarget=
     target;
@@ -6342,11 +6251,6 @@ function stealBearButton(){
     target
   );
 
-
-  /* =========================
-     BEAR START POSITION
-  ========================= */
-
   const targetX=
     r.left+
     r.width/2-
@@ -6355,10 +6259,20 @@ function stealBearButton(){
   const targetY=
     Math.max(
       75,
-      r.top+
-      r.height/2-
-      39
+      Math.min(
+        r.top+
+        r.height/2-
+        39,
+        window.innerHeight-105
+      )
     );
+
+  /*
+    IMPORTANT:
+    Bear starts INSIDE the viewport now.
+    He comes from the left or right edge,
+    but remains visible the entire time.
+  */
 
   const targetCenter=
     r.left+
@@ -6370,8 +6284,11 @@ function stealBearButton(){
 
   const startX=
     comingFromLeft
-      ? -86
-      : window.innerWidth+8;
+      ? 12
+      : Math.max(
+          12,
+          window.innerWidth-86
+        );
 
   const startY=
     Math.max(
@@ -6379,10 +6296,13 @@ function stealBearButton(){
       Math.min(
         targetY+
         (Math.random()-.5)*50,
-        window.innerHeight-100
+        window.innerHeight-105
       )
     );
 
+  /*
+    Put Bear visibly on screen FIRST.
+  */
 
   bearThief.style.transition=
     "none";
@@ -6412,10 +6332,10 @@ function stealBearButton(){
     "show"
   );
 
-
-  /* =========================
-     RUN TOWARD BUTTON
-  ========================= */
+  /*
+    Let the browser paint Bear first,
+    then visibly run toward the button.
+  */
 
   requestAnimationFrame(()=>{
 
@@ -6425,14 +6345,13 @@ function stealBearButton(){
         !bearBusy||
         !bearTarget
       ){
-
         return;
       }
 
       moveBearTo(
         targetX,
         targetY,
-        .55
+        .7
       );
 
       clearTimeout(
@@ -6440,9 +6359,8 @@ function stealBearButton(){
       );
 
       /*
-         Bear reaches the button
-         after approximately the
-         same time as the animation.
+        Bear reaches the button,
+        then steals it.
       */
 
       bearStealTimer=
@@ -6452,7 +6370,6 @@ function stealBearButton(){
             !bearBusy||
             !bearTarget
           ){
-
             return;
           }
 
@@ -6471,22 +6388,14 @@ function stealBearButton(){
 
           if(!stillVisible){
 
-            unlockBearTarget(
-              currentTarget
-            );
-
-            currentTarget.classList.remove(
-              "bear-stolen"
-            );
-
             catchBear(false);
 
             return;
           }
 
           /*
-             Now Bear has actually
-             grabbed the button.
+            THE BUTTON IS NOW STOLEN.
+            This makes it visibly fade.
           */
 
           currentTarget.classList.add(
@@ -6499,25 +6408,33 @@ function stealBearButton(){
             typeof SFX!=="undefined"&&
             SFX.click
           ){
-
             SFX.click();
-
           }
 
-          moveBearAway();
+          /*
+            Give the browser a moment to
+            show the faded button before
+            Bear runs away.
+          */
 
-        },560);
+          setTimeout(()=>{
+
+            if(
+              !bearBusy
+            ){
+              return;
+            }
+
+            moveBearAway();
+
+          },180);
+
+        },720);
 
     });
 
   });
-
 }
-
-
-/* =========================
-   CATCH BEAR
-========================= */
 
 function catchBear(
   playSound=true
@@ -6533,35 +6450,21 @@ function catchBear(
     bearStealTimer
   );
 
-
-  /*
-     Return the stolen button.
-  */
-
   if(bearTarget){
 
     bearTarget.classList.remove(
       "bear-stolen"
     );
 
-    unlockBearTarget(
-      bearTarget
-    );
-
     /*
-       Remember this viewport.
-
-       Bear will NOT steal another
-       button here until the user
-       scrolls to another viewport.
+      Once Bear is caught,
+      this viewport is finished.
     */
 
     bearVisitedViewports.add(
       getBearViewport()
     );
-
   }
-
 
   bearTarget=
     null;
@@ -6586,51 +6489,30 @@ function catchBear(
     "long-label"
   );
 
-
   if(
     playSound&&
     typeof SFX!=="undefined"&&
     SFX.success
   ){
-
     SFX.success();
-
   }
 
+  clearTimeout(
+    bearTimer
+  );
 
   /*
-     If Bear has reached the
-     maximum number of steals,
-     stop completely.
+    Do NOT immediately steal another
+    button from this viewport.
   */
 
   if(
     bearStealCount>=
     MAX_BEAR_STEALS
   ){
-
-    clearTimeout(
-      bearTimer
-    );
-
     return;
   }
-
-  /*
-     Do NOT immediately steal again
-     from the same viewport.
-  */
-
-  clearTimeout(
-    bearTimer
-  );
-
 }
-
-
-/* =========================
-   CLICK BEAR TO RETURN BUTTON
-========================= */
 
 bearThief.addEventListener(
   "click",
@@ -6638,11 +6520,6 @@ bearThief.addEventListener(
     catchBear(true);
   }
 );
-
-
-/* =========================
-   SCHEDULE BEAR
-========================= */
 
 function scheduleBear(){
 
@@ -6653,27 +6530,20 @@ function scheduleBear(){
   if(
     quietMode||
     bearBusy||
-    bearStealCount>=MAX_BEAR_STEALS
+    bearStealCount>=
+    MAX_BEAR_STEALS
   ){
-
     return;
   }
 
   const viewport=
     getBearViewport();
 
-  /*
-     Don't schedule another steal
-     in a viewport Bear has already
-     visited.
-  */
-
   if(
     bearVisitedViewports.has(
       viewport
     )
   ){
-
     return;
   }
 
@@ -6685,11 +6555,6 @@ function scheduleBear(){
     );
 }
 
-
-/* =========================
-   SCROLL = NEW OPPORTUNITY
-========================= */
-
 let bearScrollTimer=null;
 
 window.addEventListener(
@@ -6699,9 +6564,9 @@ window.addEventListener(
     if(
       quietMode||
       bearBusy||
-      bearStealCount>=MAX_BEAR_STEALS
+      bearStealCount>=
+      MAX_BEAR_STEALS
     ){
-
       return;
     }
 
@@ -6720,7 +6585,6 @@ window.addEventListener(
             viewport
           )
         ){
-
           return;
         }
 
@@ -6731,11 +6595,6 @@ window.addEventListener(
   },
   {passive:true}
 );
-
-
-/* =========================
-   QUIET MODE
-========================= */
 
 const originalToggleQuietMode=
   typeof toggleQuietMode===
@@ -6755,9 +6614,7 @@ if(
       if(quietMode){
 
         if(bearBusy){
-
           catchBear(false);
-
         }
 
         clearTimeout(
@@ -6779,13 +6636,7 @@ if(
       }
 
     };
-
 }
-
-
-/* =========================
-   RESIZE
-========================= */
 
 window.addEventListener(
   "resize",
@@ -6795,12 +6646,14 @@ window.addEventListener(
 
     const x=
       parseFloat(
-        bearThief.dataset.x||0
+        bearThief.dataset.x||
+        12
       );
 
     const y=
       parseFloat(
-        bearThief.dataset.y||75
+        bearThief.dataset.y||
+        75
       );
 
     bearThief.style.left=
@@ -6817,17 +6670,12 @@ window.addEventListener(
         75,
         Math.min(
           y,
-          window.innerHeight-100
+          window.innerHeight-105
         )
       )}px`;
 
   }
 );
-
-
-/* =========================
-   START BEAR
-========================= */
 
 setTimeout(
   scheduleBear,
