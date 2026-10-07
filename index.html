@@ -1872,7 +1872,7 @@ body.quiet-mode .scroll-cue{
   .timeline-date{
     font-size:10px;
   }
-
+  
   .os-apps{
     grid-template-columns:repeat(2,1fr);
   }
@@ -1907,6 +1907,85 @@ body.quiet-mode .scroll-cue{
   }
 }
 
+
+
+/* =========================
+   BEAR BUTTON THIEF — IMPROVED
+========================= */
+#bearThief{
+  position:fixed;
+  left:0;
+  top:0;
+  z-index:99999;
+  width:78px;
+  height:78px;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  font-size:56px;
+  cursor:pointer;
+  user-select:none;
+  touch-action:manipulation;
+  transform-origin:50% 82%;
+  filter:drop-shadow(0 8px 10px rgba(0,0,0,.22));
+  transition:left 1.15s cubic-bezier(.18,.78,.22,1), top 1.15s cubic-bezier(.18,.78,.22,1);
+}
+#bearThief.show{display:flex;animation:bearPop .32s ease-out both;}
+#bearThief.running{animation:bearRun .28s ease-in-out infinite alternate;}
+#bearThief.facing-left{transform:scaleX(-1);}
+#bearThief .bear-face{position:relative;display:flex;align-items:center;justify-content:center;}
+#bearThief .bear-item{
+  position:absolute;
+  right:-58px;
+  bottom:-3px;
+  max-width:132px;
+  min-width:42px;
+  min-height:28px;
+  padding:5px 9px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:8px;
+  font:700 11px/1.15 system-ui,sans-serif;
+  white-space:nowrap;
+  overflow:visible;
+  text-overflow:clip;
+  background:#fff;
+  color:#241f2b;
+  border:1px solid rgba(0,0,0,.12);
+  box-shadow:0 4px 10px rgba(0,0,0,.24);
+  transform:rotate(-5deg);
+  pointer-events:none;
+  box-sizing:border-box;
+  text-align:center;
+}
+#bearThief .bear-item.long-label{
+  white-space:normal;
+  max-width:145px;
+}
+@keyframes bearPop{
+  from{opacity:0;transform:scale(.55) translateY(12px)}
+  to{opacity:1;transform:scale(1) translateY(0)}
+}
+@keyframes bearRun{
+  from{transform:translateY(2px) rotate(-4deg) scale(1)}
+  to{transform:translateY(-4px) rotate(4deg) scale(1.025)}
+}
+#bearThief.facing-left.running{animation:bearRunLeft .28s ease-in-out infinite alternate;}
+@keyframes bearRunLeft{
+  from{transform:scaleX(-1) translateY(2px) rotate(-4deg) scale(1)}
+  to{transform:scaleX(-1) translateY(-4px) rotate(4deg) scale(1.025)}
+}
+.bear-stolen{
+  opacity:.16 !important;
+  pointer-events:none !important;
+  filter:grayscale(.25);
+  transition:opacity .25s ease,filter .25s ease;
+}
+@media(max-width:600px){
+  #bearThief{width:68px;height:68px;font-size:48px;}
+  #bearThief .bear-item{right:-50px;font-size:10px;max-width:108px;min-width:38px;}
+}
 </style>
 </head>
 
@@ -2369,7 +2448,7 @@ body.quiet-mode .scroll-cue{
 <!-- =========================
      MINI GAME
 ========================= -->
-
+  
 <section id="game">
 
   <div class="wrap">
@@ -2725,6 +2804,13 @@ body.quiet-mode .scroll-cue{
 
   </div>
 
+</div>
+
+
+
+<!-- Bear button thief -->
+<div id="bearThief" aria-label="Catch the bear">
+  <span class="bear-face">🧸<span class="bear-item"></span></span>
 </div>
 
 <script>
@@ -3585,6 +3671,7 @@ function updateQuizHeader(){
     CUSTOM.quizzes.length;
 
   quizProgressText.textContent=
+  
     `Question ${Math.min(
       quizIndex+1,
       total
@@ -3661,6 +3748,7 @@ function renderQuiz(){
             ){
 
               const completedScore=
+              
                 quizScore;
 
               if(
@@ -4656,6 +4744,249 @@ setTimeout(()=>{
   createHearts(false);
 
 },1000);
+
+
+
+/* =========================
+   BEAR BUTTON THIEF — IMPROVED
+========================= */
+const bearThief=document.getElementById("bearThief");
+const bearItem=bearThief.querySelector(".bear-item");
+let bearTarget=null;
+let bearBusy=false;
+let bearTimer=null;
+let bearMoveTimer=null;
+let bearStealTimer=null;
+
+function getBearButtons(){
+  const cx=window.innerWidth/2;
+  const cy=window.innerHeight/2;
+
+  return [...document.querySelectorAll(".btn, .os-app, .moods button")].filter(button=>{
+    if(!button || button.disabled)return false;
+    if(button.classList.contains("bear-stolen"))return false;
+    if(button.closest("#bearThief"))return false;
+
+    const r=button.getBoundingClientRect();
+    if(r.width<20 || r.height<20)return false;
+
+    const visibleWidth=Math.max(0,Math.min(r.right,window.innerWidth)-Math.max(r.left,0));
+    const visibleHeight=Math.max(0,Math.min(r.bottom,window.innerHeight)-Math.max(r.top,0));
+    const visibleArea=visibleWidth*visibleHeight;
+    const area=r.width*r.height;
+
+    if(visibleArea<=0 || visibleArea/area<.72)return false;
+
+    const buttonCx=r.left+r.width/2;
+    const buttonCy=r.top+r.height/2;
+    const distance=Math.hypot(buttonCx-cx,buttonCy-cy);
+    button.dataset.bearDistance=distance;
+    return true;
+  }).sort((a,b)=>Number(a.dataset.bearDistance)-Number(b.dataset.bearDistance));
+}
+
+function pickVisibleBearButton(){
+  const buttons=getBearButtons();
+  if(!buttons.length)return null;
+
+  const bestDistance=Number(buttons[0].dataset.bearDistance||Infinity);
+  const nearButtons=buttons.filter(button=>Number(button.dataset.bearDistance||Infinity)<=bestDistance+150);
+  return nearButtons[Math.floor(Math.random()*nearButtons.length)];
+}
+
+function moveBearTo(x,y,duration=1.15){
+  const maxX=Math.max(8,window.innerWidth-86);
+  const maxY=Math.max(70,window.innerHeight-96);
+  x=Math.max(8,Math.min(x,maxX));
+  y=Math.max(70,Math.min(y,maxY));
+
+  const oldX=parseFloat(bearThief.dataset.x||x);
+  bearThief.classList.toggle("facing-left",x<oldX);
+  bearThief.dataset.x=x;
+  bearThief.dataset.y=y;
+  bearThief.style.transition=`left ${duration}s cubic-bezier(.18,.78,.22,1), top ${duration}s cubic-bezier(.18,.78,.22,1)`;
+  bearThief.style.left=`${x}px`;
+  bearThief.style.top=`${y}px`;
+}
+
+function setBearItemFromButton(button){
+  const text=(button.innerText||button.textContent||"button").replace(/\s+/g," ").trim();
+  bearItem.textContent=text||"button";
+  bearItem.classList.toggle("long-label",(text||"button").length>15);
+
+  const style=getComputedStyle(button);
+  bearItem.style.background=style.background;
+  bearItem.style.backgroundColor=style.backgroundColor;
+  bearItem.style.color=style.color;
+  bearItem.style.border=style.border;
+  bearItem.style.borderRadius=style.borderRadius;
+  bearItem.style.boxShadow=style.boxShadow;
+  bearItem.style.fontFamily=style.fontFamily;
+  bearItem.style.fontWeight=style.fontWeight;
+  bearItem.style.fontSize=style.fontSize;
+  bearItem.style.lineHeight=style.lineHeight;
+  bearItem.style.padding="5px 9px";
+}
+
+function moveBearAway(){
+  if(!bearBusy)return;
+
+  const currentX=parseFloat(bearThief.dataset.x||window.innerWidth/2);
+  const currentY=parseFloat(bearThief.dataset.y||window.innerHeight/2);
+
+  /* Bear runs to a random safe spot INSIDE the screen */
+  const maxX=Math.max(8,window.innerWidth-86);
+  const maxY=Math.max(75,window.innerHeight-100);
+
+  let x=8+Math.random()*Math.max(8,maxX-8);
+  let y=75+Math.random()*Math.max(8,maxY-75);
+
+  /* Keep Bear reasonably away from the button she just stole */
+  if(Math.abs(x-currentX)<120 && Math.abs(y-currentY)<100){
+    x=Math.min(maxX,Math.max(8,x+160));
+    y=Math.min(maxY,Math.max(75,y+100));
+  }
+
+  bearThief.classList.add("running");
+  bearThief.classList.toggle("facing-left",x<currentX);
+
+  bearThief.dataset.x=x;
+  bearThief.dataset.y=y;
+
+  bearThief.style.transition="left 1.25s cubic-bezier(.22,.72,.2,1), top 1.25s cubic-bezier(.22,.72,.2,1)";
+  bearThief.style.left=`${x}px`;
+  bearThief.style.top=`${y}px`;
+
+  clearTimeout(bearMoveTimer);
+
+  bearMoveTimer=setTimeout(()=>{
+    if(!bearBusy)return;
+
+    /* Bear has reached her hiding spot.
+       She stays visible with the stolen button! */
+    bearThief.classList.remove("running");
+
+    /* Keep Bear clickable until the user catches her */
+    bearThief.classList.add("show");
+  },1350);
+}
+  
+function stealBearButton(){
+  if(quietMode || bearBusy)return;
+
+  const target=pickVisibleBearButton();
+  if(!target){scheduleBear();return;}
+
+  const r=target.getBoundingClientRect();
+  if(r.bottom<=0 || r.top>=window.innerHeight || r.right<=0 || r.left>=window.innerWidth){
+    scheduleBear();
+    return;
+  }
+
+  bearTarget=target;
+  bearBusy=true;
+  setBearItemFromButton(target);
+
+  const targetX=r.left+r.width/2-39;
+  const targetY=Math.max(75,r.top+r.height/2-39);
+  const comingFromLeft=r.left+r.width/2>window.innerWidth/2;
+  const startX=comingFromLeft ? -86 : window.innerWidth+8;
+  const startY=Math.max(75,Math.min(targetY+(Math.random()-.5)*70,window.innerHeight-100));
+
+  bearThief.style.transition="none";
+  bearThief.dataset.x=startX;
+  bearThief.dataset.y=startY;
+  bearThief.style.left=`${startX}px`;
+  bearThief.style.top=`${startY}px`;
+  bearThief.classList.remove("running");
+  bearThief.classList.toggle("facing-left",targetX<startX);
+  bearThief.classList.add("show");
+
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      if(!bearBusy)return;
+      moveBearTo(targetX,targetY,1.25);
+
+      clearTimeout(bearStealTimer);
+      bearStealTimer=setTimeout(()=>{
+        if(!bearBusy || !bearTarget)return;
+
+        const currentTarget=bearTarget;
+        const now=currentTarget.getBoundingClientRect();
+        const stillVisible=now.width>0 && now.height>0 && now.bottom>0 && now.top<window.innerHeight;
+
+        if(!stillVisible){
+          catchBear(false);
+          return;
+        }
+
+        currentTarget.classList.add("bear-stolen");
+        if(typeof SFX!=="undefined" && SFX.click)SFX.click();
+        moveBearAway();
+      },1280);
+    });
+  });
+}
+
+function catchBear(playSound=true){
+  if(!bearBusy)return;
+
+  clearTimeout(bearMoveTimer);
+  clearTimeout(bearStealTimer);
+
+  if(bearTarget)bearTarget.classList.remove("bear-stolen");
+
+  bearTarget=null;
+  bearBusy=false;
+  bearThief.classList.remove("show","running","facing-left");
+  bearItem.textContent="";
+  bearItem.removeAttribute("style");
+  bearItem.classList.remove("long-label");
+
+  if(playSound && typeof SFX!=="undefined" && SFX.success)SFX.success();
+
+  clearTimeout(bearTimer);
+  bearTimer=setTimeout(stealBearButton,4500+Math.random()*6500);
+}
+
+bearThief.addEventListener("click",()=>catchBear(true));
+
+function scheduleBear(){
+  clearTimeout(bearTimer);
+  if(quietMode || bearBusy)return;
+  bearTimer=setTimeout(stealBearButton,5000+Math.random()*9000);
+}
+
+const originalToggleQuietMode=bearThief.dataset.quietWrapped||typeof toggleQuietMode==="function"
+  ? toggleQuietMode : null;
+if(originalToggleQuietMode){
+  toggleQuietMode=function(){
+    originalToggleQuietMode();
+    if(quietMode){
+      if(bearBusy)catchBear(false);
+      clearTimeout(bearTimer);
+      clearTimeout(bearMoveTimer);
+      clearTimeout(bearStealTimer);
+    }else{
+      scheduleBear();
+    }
+  };
+  bearThief.dataset.quietWrapped="1";
+}
+
+window.addEventListener("resize",()=>{
+  if(!bearBusy)return;
+  const x=parseFloat(bearThief.dataset.x||0);
+  const y=parseFloat(bearThief.dataset.y||70);
+  if(x<0 || x>window.innerWidth){
+    bearThief.style.left=`${x}px`;
+  }else{
+    bearThief.style.left=`${Math.max(8,Math.min(x,window.innerWidth-86))}px`;
+  }
+  bearThief.style.top=`${Math.max(70,Math.min(y,window.innerHeight-100))}px`;
+});
+
+setTimeout(scheduleBear,1800);
 
 </script>
 
