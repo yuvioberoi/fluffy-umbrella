@@ -1236,7 +1236,6 @@ backdrop-filter:blur(18px);
 
 .secret-unlocked h3{
   font-size:27px;
-
   margin-bottom:15px;
   background:
     linear-gradient(
@@ -1874,6 +1873,10 @@ body.quiet-mode .scroll-cue{
     font-size:10px;
   }
 
+  .os-apps{
+    grid-template-columns:repeat(2,1fr);
+  }
+
   .secret-question{
     grid-template-columns:1fr 65px;
     gap:10px;
@@ -1904,81 +1907,6 @@ body.quiet-mode .scroll-cue{
   }
 }
 
-</style>
-<style>
-
-/* =========================
-   BEAR BUTTON THIEF
-========================= */
-#bearThief{
-  position:fixed;
-  left:12px;
-  top:50%;
-  width:76px;
-  height:76px;
-  z-index:2147483000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  pointer-events:none;
-  opacity:0;
-  transform:translate3d(-120px,-50%,0);
-  transition:transform .48s cubic-bezier(.2,.8,.2,1),opacity .18s ease;
-  will-change:transform;
-  user-select:none;
-}
-#bearThief.visible{opacity:1;}
-#bearThief.clickable{pointer-events:auto;cursor:pointer;}
-#bearThief .bearEmoji{
-  position:relative;
-  z-index:1;
-  font-size:62px;
-  line-height:1;
-  display:block;
-  filter:drop-shadow(0 5px 5px rgba(0,0,0,.25));
-  transform:scaleX(var(--bear-face,1));
-}
-#bearThief.running .bearEmoji{animation:bearRunBob .16s infinite alternate ease-in-out;}
-@keyframes bearRunBob{
-  from{transform:translateY(1px) scaleX(var(--bear-face,1)) rotate(-2deg);}
-  to{transform:translateY(-3px) scaleX(var(--bear-face,1)) rotate(2deg);}
-}
-#bearThief .bearHeldButton{
-  position:absolute;
-  top:50%;
-  width:max-content;
-  max-width:none;
-  pointer-events:none;
-  transform-origin:center;
-  z-index:5;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  opacity:1!important;
-  visibility:visible!important;
-}
-#bearThief .bearHeldButton.fromLeft{left:53px;transform:translateY(-50%) rotate(-7deg);}
-#bearThief .bearHeldButton.fromRight{right:53px;transform:translateY(-50%) rotate(7deg);}
-#bearThief .bearHeldButton button{
-  pointer-events:none!important;
-  margin:0!important;
-  cursor:default!important;
-  max-width:none!important;
-  opacity:1!important;
-  visibility:visible!important;
-  filter:none!important;
-}
-.bear-target-faded{
-  opacity:.32!important;
-  transition:opacity .18s ease!important;
-}
-.bear-target-locked{pointer-events:none!important;}
-@media(max-width:600px){
-  #bearThief{width:66px;height:66px;}
-  #bearThief .bearEmoji{font-size:54px;}
-  #bearThief .bearHeldButton.fromLeft{left:45px;}
-  #bearThief .bearHeldButton.fromRight{right:45px;}
-}
 </style>
 </head>
 
@@ -2428,7 +2356,6 @@ body.quiet-mode .scroll-cue{
         onclick="openGift()"
       >
         Open it
-        
       </button>
 
       <div id="surpriseText"></div>
@@ -2485,7 +2412,7 @@ body.quiet-mode .scroll-cue{
   </div>
 
 </section>
-  
+
 <!-- =========================
      QUIZ
 ========================= -->
@@ -3043,7 +2970,6 @@ function reveal(){
   box.classList.toggle("show");
 
   SFX.click();
-
 
 }
 
@@ -3644,7 +3570,6 @@ const quizProgressText =
   );
 
 const quizProgressBar =
-  
   document.getElementById(
     "quizProgressBar"
   );
@@ -3725,7 +3650,7 @@ function renderQuiz(){
             ];
 
           SFX.success();
-          
+
           setTimeout(()=>{
 
             quizIndex++;
@@ -4409,14 +4334,121 @@ applyQuietMode();
 
 
 /* =========================
-   HEART EFFECT
+   HEARTS
 ========================= */
 
+function createHearts(
+  burst=true
+){
+
+  if(quietMode)return;
+
+  const count =
+    burst ? 18 : 8;
+
+  for(let i=0;i<count;i++){
+
+    const heart =
+      document.createElement("div");
+
+    heart.className=
+      "falling-heart";
+
+    heart.textContent=
+      Math.random()>.5
+        ? "❤️"
+        : "💙";
+
+    heart.style.left=
+      Math.random()*100+"vw";
+
+    heart.style.fontSize=
+      (12+Math.random()*18)+"px";
+
+    heart.style.animationDuration=
+      (3+Math.random()*4)+"s";
+
+    heart.style.animationDelay=
+      Math.random()*1.5+"s";
+
+    document.body.appendChild(
+      heart
+    );
+
+    setTimeout(()=>{
+
+      heart.remove();
+
+    },8000);
+
+  }
+
+}
+
+
+/* =========================
+   SPARKLES
+========================= */
+
+function createSparkles(){
+
+  if(quietMode)return;
+
+  for(let i=0;i<25;i++){
+
+    const sparkle =
+      document.createElement("div");
+
+    sparkle.className="sparkle";
+
+    sparkle.textContent=
+      Math.random()>.5
+        ? "✦"
+        : "✧";
+
+    sparkle.style.left=
+      (20+Math.random()*60)+"vw";
+
+    sparkle.style.top=
+      (20+Math.random()*60)+"vh";
+
+    sparkle.style.fontSize=
+      (10+Math.random()*20)+"px";
+
+    document.body.appendChild(
+      sparkle
+    );
+
+    setTimeout(()=>{
+
+      sparkle.remove();
+
+    },900);
+
+  }
+
+}
+
+
+/* =========================
+   CURSOR HEARTS
+========================= */
+
+let cursorTimer=0;
+
 document.addEventListener(
-  "click",
+  "pointermove",
   event=>{
 
     if(quietMode)return;
+
+    const now=Date.now();
+
+    if(
+      now-cursorTimer<90
+    )return;
+
+    cursorTimer=now;
 
     const heart =
       document.createElement("div");
@@ -4424,10 +4456,10 @@ document.addEventListener(
     heart.className=
       "cursor-heart";
 
-    heart.textContent =
+    heart.textContent=
       Math.random()>.5
         ? "♡"
-        : "♥";
+        : "✦";
 
     heart.style.left=
       event.clientX+"px";
@@ -4625,237 +4657,6 @@ setTimeout(()=>{
 
 },1000);
 
-</script>
-
-
-
-<div id="bearThief" aria-label="Button stealing bear" title="🐻">
-  <span class="bearEmoji" aria-hidden="true">🐻</span>
-</div>
-
-<script>
-/* =========================
-   BEAR BUTTON THIEF LOGIC
-========================= */
-(function(){
-  "use strict";
-
-  const bear = document.getElementById("bearThief");
-  if(!bear) return;
-
-  const MAX_STEALS = 8;
-  let stealCount = 0;
-  let busy = false;
-  let active = null;
-  let scrollTimer = null;
-  let initialTimer = null;
-
-  /* One theft per genuine viewpoint. Small scrolling inside the same
-     screen/viewpoint will not create another theft. */
-  let viewpointAnchorY = null;
-  const VIEWPOINT_DISTANCE = 0.65;
-
-  const sleep = ms => new Promise(resolve => setTimeout(resolve,ms));
-
-  function isNewViewpoint(){
-    if(viewpointAnchorY === null) return true;
-    const distance = Math.abs(window.scrollY - viewpointAnchorY);
-    return distance >= window.innerHeight * VIEWPOINT_DISTANCE;
-  }
-
-  function isVisibleButton(button){
-    if(!button || button.closest("#bearThief")) return false;
-    if(button.disabled || button.getAttribute("aria-disabled") === "true") return false;
-    if(button.closest("nav, header, .top-nav, .navbar, .modal, [role=dialog]")) return false;
-    if(button.classList.contains("modal-close")) return false;
-
-    const style = getComputedStyle(button);
-    if(style.display === "none" || style.visibility === "hidden" || parseFloat(style.opacity) === 0) return false;
-
-    const r = button.getBoundingClientRect();
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const visibleW = Math.min(r.right,vw) - Math.max(r.left,0);
-    const visibleH = Math.min(r.bottom,vh) - Math.max(r.top,0);
-
-    return r.width > 0 && r.height > 0 && visibleW >= Math.min(r.width * .72,120) && visibleH >= Math.min(r.height * .72,60);
-  }
-
-  function getCandidates(){
-    return Array.from(document.querySelectorAll("button")).filter(isVisibleButton);
-  }
-
-  function chooseTarget(){
-    const candidates = getCandidates();
-    if(!candidates.length) return null;
-    return candidates[Math.floor(Math.random() * candidates.length)];
-  }
-
-  function setBearPosition(x,y,instant){
-    bear.style.transition = instant ? "none" : "";
-    bear.style.transform = `translate3d(${Math.round(x)}px,${Math.round(y)}px,0)`;
-    if(instant){
-      requestAnimationFrame(()=>{ bear.style.transition=""; });
-    }
-  }
-
-  function edgePosition(side){
-    const w = bear.offsetWidth || 76;
-    const h = bear.offsetHeight || 76;
-    const x = side === "left" ? 8 : window.innerWidth - w - 8;
-    const y = Math.max(12,Math.min(window.innerHeight-h-12,window.innerHeight*.18));
-    return {x,y};
-  }
-
-  function copyButtonAppearance(source,clone){
-    const s = getComputedStyle(source);
-    const props = [
-      "display","box-sizing","width","height","min-width","min-height","max-width","max-height",
-      "padding","margin","font-family","font-size","font-weight","font-style","line-height","letter-spacing",
-      "text-align","text-transform","color","background","background-color","background-image","border",
-      "border-radius","box-shadow","text-shadow","white-space","opacity","filter"
-    ];
-    props.forEach(prop=>clone.style.setProperty(prop,s.getPropertyValue(prop),"important"));
-    clone.style.setProperty("opacity","1","important");
-    clone.style.setProperty("filter","none","important");
-    clone.style.margin = "0";
-    clone.style.pointerEvents = "none";
-    clone.style.position = "relative";
-    clone.style.left = "auto";
-    clone.style.top = "auto";
-    clone.removeAttribute("id");
-    clone.querySelectorAll("[id]").forEach(el=>el.removeAttribute("id"));
-    clone.querySelectorAll("[autofocus]").forEach(el=>el.removeAttribute("autofocus"));
-  }
-
-  function createHeldClone(button,side){
-    const holder = document.createElement("div");
-    holder.className = "bearHeldButton " + (side === "left" ? "fromLeft" : "fromRight");
-
-    const clone = button.cloneNode(true);
-    copyButtonAppearance(button,clone);
-
-    const rect = button.getBoundingClientRect();
-    const maxVisibleWidth = Math.max(120,window.innerWidth*.55);
-    const scale = rect.width > maxVisibleWidth ? maxVisibleWidth/rect.width : 1;
-    holder.style.transform = `translateY(-50%) rotate(${side === "left" ? -7 : 7}deg) scale(${scale})`;
-    holder.appendChild(clone);
-    bear.appendChild(holder);
-    return holder;
-  }
-
-  function cleanupActive(returnButton){
-    if(!active) return;
-
-    const item = active;
-    if(item.cloneHolder) item.cloneHolder.remove();
-
-    item.button.classList.remove("bear-target-locked","bear-target-faded");
-    item.button.style.visibility = item.originalVisibility;
-    item.button.style.opacity = item.originalOpacity;
-
-    if(returnButton){
-      item.button.scrollIntoView({block:"nearest",inline:"nearest"});
-    }
-
-    active = null;
-    bear.classList.remove("clickable","running");
-    bear.style.pointerEvents = "none";
-    bear.style.opacity = "0";
-  }
-
-  async function steal(){
-    if(busy || stealCount >= MAX_STEALS) return;
-    if(!isNewViewpoint()) return;
-
-    const button = chooseTarget();
-    if(!button) return;
-
-    /* Lock the viewpoint immediately: only ONE button can be stolen here. */
-    viewpointAnchorY = window.scrollY;
-    busy = true;
-    button.classList.add("bear-target-locked");
-
-    const rect = button.getBoundingClientRect();
-    const bearW = bear.offsetWidth || 76;
-    const bearH = bear.offsetHeight || 76;
-    const side = rect.left > window.innerWidth*.5 ? "right" : "left";
-    const start = edgePosition(side);
-    const targetX = Math.max(8,Math.min(window.innerWidth-bearW-8,rect.left+rect.width/2-bearW/2));
-    const targetY = Math.max(8,Math.min(window.innerHeight-bearH-8,rect.top+rect.height/2-bearH/2));
-
-    active = {
-      button,
-      originalVisibility: button.style.visibility,
-      originalOpacity: button.style.opacity,
-      cloneHolder:null
-    };
-
-    bear.style.setProperty("--bear-face",side === "left" ? "1" : "-1");
-    setBearPosition(start.x,start.y,true);
-    bear.classList.add("visible","running");
-
-    await sleep(55);
-    if(!active) return;
-
-    setBearPosition(targetX,targetY,false);
-    await sleep(510);
-    if(!active) return;
-
-    /* The original remains visible, but fades instead of disappearing. */
-    button.classList.add("bear-target-faded");
-
-    /* The bear carries a full-colour, readable copy of the exact button. */
-    active.cloneHolder = createHeldClone(button,side);
-
-    await sleep(120);
-    if(!active) return;
-
-    /* Return to an on-screen position while visibly carrying the button. */
-    const afterGrab = edgePosition(side);
-    setBearPosition(afterGrab.x,afterGrab.y,false);
-    await sleep(560);
-    if(!active) return;
-
-    stealCount++;
-    bear.classList.remove("running");
-    bear.classList.add("clickable");
-    bear.style.pointerEvents = "auto";
-    busy = false;
-  }
-
-  bear.addEventListener("click",function(e){
-    e.preventDefault();
-    e.stopPropagation();
-    if(!active || !bear.classList.contains("clickable")) return;
-
-    cleanupActive(true);
-
-    /* Stay locked here: returning the button does NOT allow another theft
-       until the user reaches a genuinely new viewpoint. */
-    viewpointAnchorY = window.scrollY;
-    busy = false;
-  },true);
-
-  function scheduleSteal(delay){
-    clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(()=>{
-      if(!busy && isNewViewpoint()) steal();
-    },delay);
-  }
-
-  window.addEventListener("scroll",function(){
-    if(stealCount >= MAX_STEALS) return;
-    if(!busy && isNewViewpoint()) scheduleSteal(140);
-  },{passive:true});
-
-  window.addEventListener("resize",function(){
-    if(!busy && stealCount < MAX_STEALS && isNewViewpoint()) scheduleSteal(200);
-  },{passive:true});
-
-  initialTimer = setTimeout(()=>steal(),850);
-
-})();
 </script>
 
 </body>
