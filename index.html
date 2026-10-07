@@ -5794,243 +5794,1045 @@ setTimeout(()=>{
 /* =========================
    BEAR BUTTON THIEF — IMPROVED
 ========================= */
+
 const bearThief=document.getElementById("bearThief");
 const bearItem=bearThief.querySelector(".bear-item");
+
 let bearTarget=null;
 let bearBusy=false;
 let bearTimer=null;
 let bearMoveTimer=null;
 let bearStealTimer=null;
 
-function getBearButtons(){
-  const cx=window.innerWidth/2;
-  const cy=window.innerHeight/2;
+const MAX_BEAR_STEALS=7;
+let bearStealCount=0;
 
-  return [...document.querySelectorAll(".btn, .os-app, .moods button")].filter(button=>{
-    if(!button || button.disabled)return false;
-    if(button.classList.contains("bear-stolen"))return false;
-    if(button.closest("#bearThief"))return false;
+/*
+   Remember which viewport Bear has already visited.
+   Bear will not steal again from the same viewport
+   after the stolen button is returned.
+*/
+const bearVisitedViewports=new Set();
 
-    const r=button.getBoundingClientRect();
-    if(r.width<20 || r.height<20)return false;
-
-    const visibleWidth=Math.max(0,Math.min(r.right,window.innerWidth)-Math.max(r.left,0));
-    const visibleHeight=Math.max(0,Math.min(r.bottom,window.innerHeight)-Math.max(r.top,0));
-    const visibleArea=visibleWidth*visibleHeight;
-    const area=r.width*r.height;
-
-    if(visibleArea<=0 || visibleArea/area<.72)return false;
-
-    const buttonCx=r.left+r.width/2;
-    const buttonCy=r.top+r.height/2;
-    const distance=Math.hypot(buttonCx-cx,buttonCy-cy);
-    button.dataset.bearDistance=distance;
-    return true;
-  }).sort((a,b)=>Number(a.dataset.bearDistance)-Number(b.dataset.bearDistance));
+function getBearViewport(){
+  return Math.floor(
+    window.scrollY /
+    Math.max(1,window.innerHeight*.85)
+  );
 }
+
+
+/* =========================
+   FIND VISIBLE BUTTONS
+========================= */
+
+function getBearButtons(){
+
+  const buttons=[
+    ...document.querySelectorAll(
+      ".btn, .os-app, .moods button"
+    )
+  ];
+
+  return buttons.filter(button=>{
+
+    if(!button)return false;
+
+    if(button.disabled)return false;
+
+    if(button.classList.contains("bear-stolen")){
+      return false;
+    }
+
+    if(button.dataset.bearLocked==="1"){
+      return false;
+    }
+
+    if(button.closest("#bearThief")){
+      return false;
+    }
+
+    const r=
+      button.getBoundingClientRect();
+
+    if(r.width<20 || r.height<20){
+      return false;
+    }
+
+    const visibleWidth=
+      Math.max(
+        0,
+        Math.min(r.right,window.innerWidth)
+        -
+        Math.max(r.left,0)
+      );
+
+    const visibleHeight=
+      Math.max(
+        0,
+        Math.min(r.bottom,window.innerHeight)
+        -
+        Math.max(r.top,0)
+      );
+
+    const visibleArea=
+      visibleWidth*visibleHeight;
+
+    const totalArea=
+      r.width*r.height;
+
+    if(
+      visibleArea<=0 ||
+      visibleArea/totalArea<.72
+    ){
+      return false;
+    }
+
+    return true;
+
+  });
+
+}
+
+
+/* =========================
+   PICK A BUTTON
+========================= */
 
 function pickVisibleBearButton(){
-  const buttons=getBearButtons();
-  if(!buttons.length)return null;
 
-  const bestDistance=Number(buttons[0].dataset.bearDistance||Infinity);
-  const nearButtons=buttons.filter(button=>Number(button.dataset.bearDistance||Infinity)<=bestDistance+150);
-  return nearButtons[Math.floor(Math.random()*nearButtons.length)];
-}
+  const buttons=
+    getBearButtons();
 
-function moveBearTo(x,y,duration=1.15){
-  const maxX=Math.max(8,window.innerWidth-86);
-  const maxY=Math.max(70,window.innerHeight-96);
-  x=Math.max(8,Math.min(x,maxX));
-  y=Math.max(70,Math.min(y,maxY));
-
-  const oldX=parseFloat(bearThief.dataset.x||x);
-  bearThief.classList.toggle("facing-left",x<oldX);
-  bearThief.dataset.x=x;
-  bearThief.dataset.y=y;
-  bearThief.style.transition=`left ${duration}s cubic-bezier(.18,.78,.22,1), top ${duration}s cubic-bezier(.18,.78,.22,1)`;
-  bearThief.style.left=`${x}px`;
-  bearThief.style.top=`${y}px`;
-}
-
-function setBearItemFromButton(button){
-  const text=(button.innerText||button.textContent||"button").replace(/\s+/g," ").trim();
-  bearItem.textContent=text||"button";
-  bearItem.classList.toggle("long-label",(text||"button").length>15);
-
-  const style=getComputedStyle(button);
-  bearItem.style.background=style.background;
-  bearItem.style.backgroundColor=style.backgroundColor;
-  bearItem.style.color=style.color;
-  bearItem.style.border=style.border;
-  bearItem.style.borderRadius=style.borderRadius;
-  bearItem.style.boxShadow=style.boxShadow;
-  bearItem.style.fontFamily=style.fontFamily;
-  bearItem.style.fontWeight=style.fontWeight;
-  bearItem.style.fontSize=style.fontSize;
-  bearItem.style.lineHeight=style.lineHeight;
-  bearItem.style.padding="5px 9px";
-}
-
-function moveBearAway(){
-  if(!bearBusy)return;
-
-  const currentX=parseFloat(bearThief.dataset.x||window.innerWidth/2);
-  const currentY=parseFloat(bearThief.dataset.y||window.innerHeight/2);
-
-  /* Bear runs to a random safe spot INSIDE the screen */
-  const maxX=Math.max(8,window.innerWidth-86);
-  const maxY=Math.max(75,window.innerHeight-100);
-
-  let x=8+Math.random()*Math.max(8,maxX-8);
-  let y=75+Math.random()*Math.max(8,maxY-75);
-
-  /* Keep Bear reasonably away from the button she just stole */
-  if(Math.abs(x-currentX)<120 && Math.abs(y-currentY)<100){
-    x=Math.min(maxX,Math.max(8,x+160));
-    y=Math.min(maxY,Math.max(75,y+100));
+  if(!buttons.length){
+    return null;
   }
 
-  bearThief.classList.add("running");
-  bearThief.classList.toggle("facing-left",x<currentX);
+  /*
+     Prefer buttons around the middle
+     of the current screen.
+  */
+
+  const cx=
+    window.innerWidth/2;
+
+  const cy=
+    window.innerHeight/2;
+
+  buttons.forEach(button=>{
+
+    const r=
+      button.getBoundingClientRect();
+
+    const bx=
+      r.left+r.width/2;
+
+    const by=
+      r.top+r.height/2;
+
+    button.dataset.bearDistance=
+      Math.hypot(
+        bx-cx,
+        by-cy
+      );
+
+  });
+
+  buttons.sort(
+    (a,b)=>
+      Number(a.dataset.bearDistance)
+      -
+      Number(b.dataset.bearDistance)
+  );
+
+  const best=
+    Number(
+      buttons[0].dataset.bearDistance
+    );
+
+  const choices=
+    buttons.filter(button=>
+      Number(button.dataset.bearDistance)
+      <=
+      best+170
+    );
+
+  return choices[
+    Math.floor(
+      Math.random()*choices.length
+    )
+  ];
+}
+
+
+/* =========================
+   MOVE BEAR
+========================= */
+
+function moveBearTo(
+  x,
+  y,
+  duration=.55
+){
+
+  const maxX=
+    Math.max(
+      8,
+      window.innerWidth-86
+    );
+
+  const maxY=
+    Math.max(
+      75,
+      window.innerHeight-100
+    );
+
+  x=
+    Math.max(
+      8,
+      Math.min(x,maxX)
+    );
+
+  y=
+    Math.max(
+      75,
+      Math.min(y,maxY)
+    );
+
+  const oldX=
+    parseFloat(
+      bearThief.dataset.x||x
+    );
+
+  bearThief.classList.toggle(
+    "facing-left",
+    x<oldX
+  );
 
   bearThief.dataset.x=x;
   bearThief.dataset.y=y;
 
-  bearThief.style.transition="left 1.25s cubic-bezier(.22,.72,.2,1), top 1.25s cubic-bezier(.22,.72,.2,1)";
-  bearThief.style.left=`${x}px`;
-  bearThief.style.top=`${y}px`;
+  bearThief.style.transition=
+    `left ${duration}s cubic-bezier(.18,.78,.22,1),
+     top ${duration}s cubic-bezier(.18,.78,.22,1)`;
 
-  clearTimeout(bearMoveTimer);
+  bearThief.style.left=
+    `${x}px`;
 
-  bearMoveTimer=setTimeout(()=>{
-    if(!bearBusy)return;
-
-    /* Bear has reached her hiding spot.
-       She stays visible with the stolen button! */
-    bearThief.classList.remove("running");
-
-    /* Keep Bear clickable until the user catches her */
-    bearThief.classList.add("show");
-  },1350);
+  bearThief.style.top=
+    `${y}px`;
 }
-  
+
+
+/* =========================
+   COPY BUTTON LOOK
+========================= */
+
+function setBearItemFromButton(button){
+
+  const text=
+    (
+      button.innerText||
+      button.textContent||
+      "button"
+    )
+    .replace(/\s+/g," ")
+    .trim();
+
+  bearItem.textContent=
+    text||"button";
+
+  bearItem.classList.toggle(
+    "long-label",
+    (text||"button").length>15
+  );
+
+  const style=
+    getComputedStyle(button);
+
+  bearItem.style.background=
+    style.background;
+
+  bearItem.style.backgroundColor=
+    style.backgroundColor;
+
+  bearItem.style.color=
+    style.color;
+
+  bearItem.style.border=
+    style.border;
+
+  bearItem.style.borderRadius=
+    style.borderRadius;
+
+  bearItem.style.boxShadow=
+    style.boxShadow;
+
+  bearItem.style.fontFamily=
+    style.fontFamily;
+
+  bearItem.style.fontWeight=
+    style.fontWeight;
+
+  bearItem.style.fontSize=
+    style.fontSize;
+
+  bearItem.style.lineHeight=
+    style.lineHeight;
+
+  bearItem.style.padding=
+    "5px 9px";
+}
+
+
+/* =========================
+   LOCK TARGET IMMEDIATELY
+========================= */
+
+function lockBearTarget(button){
+
+  if(!button)return;
+
+  /*
+     Save its original inline
+     pointer-events value.
+  */
+
+  button.dataset.bearOriginalPointerEvents=
+    button.style.pointerEvents;
+
+  /*
+     Mark it as locked immediately.
+     This happens BEFORE Bear starts moving.
+  */
+
+  button.dataset.bearLocked="1";
+
+  /*
+     Stop normal pointer/touch
+     interaction with the button.
+  */
+
+  button.style.pointerEvents=
+    "none";
+}
+
+
+/* =========================
+   UNLOCK TARGET
+========================= */
+
+function unlockBearTarget(button){
+
+  if(!button)return;
+
+  button.style.pointerEvents=
+    button.dataset.bearOriginalPointerEvents||
+    "";
+
+  delete button.dataset.bearOriginalPointerEvents;
+
+  delete button.dataset.bearLocked;
+}
+
+
+/* =========================
+   BEAR RUNS AWAY
+========================= */
+
+function moveBearAway(){
+
+  if(!bearBusy)return;
+
+  const currentX=
+    parseFloat(
+      bearThief.dataset.x||
+      window.innerWidth/2
+    );
+
+  const currentY=
+    parseFloat(
+      bearThief.dataset.y||
+      window.innerHeight/2
+    );
+
+  /*
+     Keep Bear INSIDE the screen.
+  */
+
+  const goLeft=
+    Math.random()<.5;
+
+  const minX=20;
+  const maxX=
+    Math.max(
+      20,
+      window.innerWidth-100
+    );
+
+  let x;
+
+  if(goLeft){
+
+    x=
+      Math.max(
+        minX,
+        currentX-
+        (120+Math.random()*180)
+      );
+
+  }else{
+
+    x=
+      Math.min(
+        maxX,
+        currentX+
+        (120+Math.random()*180)
+      );
+
+  }
+
+  /*
+     If Bear is already near an edge,
+     move toward the opposite side.
+  */
+
+  if(currentX<100){
+
+    x=
+      Math.min(
+        maxX,
+        currentX+
+        (180+Math.random()*160)
+      );
+
+  }
+
+  if(currentX>window.innerWidth-180){
+
+    x=
+      Math.max(
+        minX,
+        currentX-
+        (180+Math.random()*160)
+      );
+
+  }
+
+  const y=
+    Math.max(
+      80,
+      Math.min(
+        currentY+
+        (Math.random()-.5)*160,
+        window.innerHeight-105
+      )
+    );
+
+  bearThief.classList.add(
+    "running"
+  );
+
+  moveBearTo(
+    x,
+    y,
+    .48
+  );
+
+  clearTimeout(
+    bearMoveTimer
+  );
+
+  bearMoveTimer=
+    setTimeout(()=>{
+
+      if(!bearBusy)return;
+
+      /*
+         Bear stays visible.
+         Do NOT hide it.
+      */
+
+      bearThief.classList.add(
+        "running"
+      );
+
+    },520);
+}
+
+
+/* =========================
+   STEAL BUTTON
+========================= */
+
 function stealBearButton(){
-  if(quietMode || bearBusy)return;
 
-  const target=pickVisibleBearButton();
-  if(!target){scheduleBear();return;}
+  if(
+    quietMode||
+    bearBusy||
+    bearStealCount>=MAX_BEAR_STEALS
+  ){
 
-  const r=target.getBoundingClientRect();
-  if(r.bottom<=0 || r.top>=window.innerHeight || r.right<=0 || r.left>=window.innerWidth){
+    return;
+  }
+
+  const viewport=
+    getBearViewport();
+
+  /*
+     Do not steal another button
+     from the same viewport.
+  */
+
+  if(
+    bearVisitedViewports.has(
+      viewport
+    )
+  ){
+
+    return;
+  }
+
+  const target=
+    pickVisibleBearButton();
+
+  if(!target){
+
     scheduleBear();
     return;
   }
 
-  bearTarget=target;
-  bearBusy=true;
-  setBearItemFromButton(target);
+  const r=
+    target.getBoundingClientRect();
 
-  const targetX=r.left+r.width/2-39;
-  const targetY=Math.max(75,r.top+r.height/2-39);
-  const comingFromLeft=r.left+r.width/2>window.innerWidth/2;
-  const startX=comingFromLeft ? -86 : window.innerWidth+8;
-  const startY=Math.max(75,Math.min(targetY+(Math.random()-.5)*70,window.innerHeight-100));
+  if(
+    r.bottom<=0||
+    r.top>=window.innerHeight||
+    r.right<=0||
+    r.left>=window.innerWidth
+  ){
 
-  bearThief.style.transition="none";
-  bearThief.dataset.x=startX;
-  bearThief.dataset.y=startY;
-  bearThief.style.left=`${startX}px`;
-  bearThief.style.top=`${startY}px`;
-  bearThief.classList.remove("running");
-  bearThief.classList.toggle("facing-left",targetX<startX);
-  bearThief.classList.add("show");
+    scheduleBear();
+    return;
+  }
+
+
+  /* =========================
+     LOCK FIRST
+  ========================= */
+
+  /*
+     THIS HAPPENS BEFORE BEAR
+     EVEN STARTS MOVING.
+
+     So the user cannot click
+     this button while Bear is
+     coming toward it.
+  */
+
+  lockBearTarget(target);
+
+  bearTarget=
+    target;
+
+  bearBusy=
+    true;
+
+  setBearItemFromButton(
+    target
+  );
+
+
+  /* =========================
+     BEAR START POSITION
+  ========================= */
+
+  const targetX=
+    r.left+
+    r.width/2-
+    39;
+
+  const targetY=
+    Math.max(
+      75,
+      r.top+
+      r.height/2-
+      39
+    );
+
+  const targetCenter=
+    r.left+
+    r.width/2;
+
+  const comingFromLeft=
+    targetCenter>
+    window.innerWidth/2;
+
+  const startX=
+    comingFromLeft
+      ? -86
+      : window.innerWidth+8;
+
+  const startY=
+    Math.max(
+      75,
+      Math.min(
+        targetY+
+        (Math.random()-.5)*50,
+        window.innerHeight-100
+      )
+    );
+
+
+  bearThief.style.transition=
+    "none";
+
+  bearThief.dataset.x=
+    startX;
+
+  bearThief.dataset.y=
+    startY;
+
+  bearThief.style.left=
+    `${startX}px`;
+
+  bearThief.style.top=
+    `${startY}px`;
+
+  bearThief.classList.remove(
+    "running"
+  );
+
+  bearThief.classList.toggle(
+    "facing-left",
+    targetX<startX
+  );
+
+  bearThief.classList.add(
+    "show"
+  );
+
+
+  /* =========================
+     RUN TOWARD BUTTON
+  ========================= */
 
   requestAnimationFrame(()=>{
+
     requestAnimationFrame(()=>{
-      if(!bearBusy)return;
-      moveBearTo(targetX,targetY,1.25);
 
-      clearTimeout(bearStealTimer);
-      bearStealTimer=setTimeout(()=>{
-        if(!bearBusy || !bearTarget)return;
+      if(
+        !bearBusy||
+        !bearTarget
+      ){
 
-        const currentTarget=bearTarget;
-        const now=currentTarget.getBoundingClientRect();
-        const stillVisible=now.width>0 && now.height>0 && now.bottom>0 && now.top<window.innerHeight;
+        return;
+      }
 
-        if(!stillVisible){
-          catchBear(false);
+      moveBearTo(
+        targetX,
+        targetY,
+        .55
+      );
+
+      clearTimeout(
+        bearStealTimer
+      );
+
+      /*
+         Bear reaches the button
+         after approximately the
+         same time as the animation.
+      */
+
+      bearStealTimer=
+        setTimeout(()=>{
+
+          if(
+            !bearBusy||
+            !bearTarget
+          ){
+
+            return;
+          }
+
+          const currentTarget=
+            bearTarget;
+
+          const now=
+            currentTarget
+            .getBoundingClientRect();
+
+          const stillVisible=
+            now.width>0&&
+            now.height>0&&
+            now.bottom>0&&
+            now.top<window.innerHeight;
+
+          if(!stillVisible){
+
+            unlockBearTarget(
+              currentTarget
+            );
+
+            currentTarget.classList.remove(
+              "bear-stolen"
+            );
+
+            catchBear(false);
+
+            return;
+          }
+
+          /*
+             Now Bear has actually
+             grabbed the button.
+          */
+
+          currentTarget.classList.add(
+            "bear-stolen"
+          );
+
+          bearStealCount++;
+
+          if(
+            typeof SFX!=="undefined"&&
+            SFX.click
+          ){
+
+            SFX.click();
+
+          }
+
+          moveBearAway();
+
+        },560);
+
+    });
+
+  });
+
+}
+
+
+/* =========================
+   CATCH BEAR
+========================= */
+
+function catchBear(
+  playSound=true
+){
+
+  if(!bearBusy)return;
+
+  clearTimeout(
+    bearMoveTimer
+  );
+
+  clearTimeout(
+    bearStealTimer
+  );
+
+
+  /*
+     Return the stolen button.
+  */
+
+  if(bearTarget){
+
+    bearTarget.classList.remove(
+      "bear-stolen"
+    );
+
+    unlockBearTarget(
+      bearTarget
+    );
+
+    /*
+       Remember this viewport.
+
+       Bear will NOT steal another
+       button here until the user
+       scrolls to another viewport.
+    */
+
+    bearVisitedViewports.add(
+      getBearViewport()
+    );
+
+  }
+
+
+  bearTarget=
+    null;
+
+  bearBusy=
+    false;
+
+  bearThief.classList.remove(
+    "show",
+    "running",
+    "facing-left"
+  );
+
+  bearItem.textContent=
+    "";
+
+  bearItem.removeAttribute(
+    "style"
+  );
+
+  bearItem.classList.remove(
+    "long-label"
+  );
+
+
+  if(
+    playSound&&
+    typeof SFX!=="undefined"&&
+    SFX.success
+  ){
+
+    SFX.success();
+
+  }
+
+
+  /*
+     If Bear has reached the
+     maximum number of steals,
+     stop completely.
+  */
+
+  if(
+    bearStealCount>=
+    MAX_BEAR_STEALS
+  ){
+
+    clearTimeout(
+      bearTimer
+    );
+
+    return;
+  }
+
+  /*
+     Do NOT immediately steal again
+     from the same viewport.
+  */
+
+  clearTimeout(
+    bearTimer
+  );
+
+}
+
+
+/* =========================
+   CLICK BEAR TO RETURN BUTTON
+========================= */
+
+bearThief.addEventListener(
+  "click",
+  ()=>{
+    catchBear(true);
+  }
+);
+
+
+/* =========================
+   SCHEDULE BEAR
+========================= */
+
+function scheduleBear(){
+
+  clearTimeout(
+    bearTimer
+  );
+
+  if(
+    quietMode||
+    bearBusy||
+    bearStealCount>=MAX_BEAR_STEALS
+  ){
+
+    return;
+  }
+
+  const viewport=
+    getBearViewport();
+
+  /*
+     Don't schedule another steal
+     in a viewport Bear has already
+     visited.
+  */
+
+  if(
+    bearVisitedViewports.has(
+      viewport
+    )
+  ){
+
+    return;
+  }
+
+  bearTimer=
+    setTimeout(
+      stealBearButton,
+      3500+
+      Math.random()*4500
+    );
+}
+
+
+/* =========================
+   SCROLL = NEW OPPORTUNITY
+========================= */
+
+let bearScrollTimer=null;
+
+window.addEventListener(
+  "scroll",
+  ()=>{
+
+    if(
+      quietMode||
+      bearBusy||
+      bearStealCount>=MAX_BEAR_STEALS
+    ){
+
+      return;
+    }
+
+    clearTimeout(
+      bearScrollTimer
+    );
+
+    bearScrollTimer=
+      setTimeout(()=>{
+
+        const viewport=
+          getBearViewport();
+
+        if(
+          bearVisitedViewports.has(
+            viewport
+          )
+        ){
+
           return;
         }
 
-        currentTarget.classList.add("bear-stolen");
-        if(typeof SFX!=="undefined" && SFX.click)SFX.click();
-        moveBearAway();
-      },1280);
-    });
-  });
+        scheduleBear();
+
+      },700);
+
+  },
+  {passive:true}
+);
+
+
+/* =========================
+   QUIET MODE
+========================= */
+
+const originalToggleQuietMode=
+  typeof toggleQuietMode===
+  "function"
+    ? toggleQuietMode
+    : null;
+
+if(
+  originalToggleQuietMode
+){
+
+  toggleQuietMode=
+    function(){
+
+      originalToggleQuietMode();
+
+      if(quietMode){
+
+        if(bearBusy){
+
+          catchBear(false);
+
+        }
+
+        clearTimeout(
+          bearTimer
+        );
+
+        clearTimeout(
+          bearMoveTimer
+        );
+
+        clearTimeout(
+          bearStealTimer
+        );
+
+      }else{
+
+        scheduleBear();
+
+      }
+
+    };
+
 }
 
-function catchBear(playSound=true){
-  if(!bearBusy)return;
 
-  clearTimeout(bearMoveTimer);
-  clearTimeout(bearStealTimer);
+/* =========================
+   RESIZE
+========================= */
 
-  if(bearTarget)bearTarget.classList.remove("bear-stolen");
+window.addEventListener(
+  "resize",
+  ()=>{
 
-  bearTarget=null;
-  bearBusy=false;
-  bearThief.classList.remove("show","running","facing-left");
-  bearItem.textContent="";
-  bearItem.removeAttribute("style");
-  bearItem.classList.remove("long-label");
+    if(!bearBusy)return;
 
-  if(playSound && typeof SFX!=="undefined" && SFX.success)SFX.success();
+    const x=
+      parseFloat(
+        bearThief.dataset.x||0
+      );
 
-  clearTimeout(bearTimer);
-  bearTimer=setTimeout(stealBearButton,4500+Math.random()*6500);
-}
+    const y=
+      parseFloat(
+        bearThief.dataset.y||75
+      );
 
-bearThief.addEventListener("click",()=>catchBear(true));
+    bearThief.style.left=
+      `${Math.max(
+        8,
+        Math.min(
+          x,
+          window.innerWidth-86
+        )
+      )}px`;
 
-function scheduleBear(){
-  clearTimeout(bearTimer);
-  if(quietMode || bearBusy)return;
-  bearTimer=setTimeout(stealBearButton,5000+Math.random()*9000);
-}
+    bearThief.style.top=
+      `${Math.max(
+        75,
+        Math.min(
+          y,
+          window.innerHeight-100
+        )
+      )}px`;
 
-const originalToggleQuietMode=bearThief.dataset.quietWrapped||typeof toggleQuietMode==="function"
-  ? toggleQuietMode : null;
-if(originalToggleQuietMode){
-  toggleQuietMode=function(){
-    originalToggleQuietMode();
-    if(quietMode){
-      if(bearBusy)catchBear(false);
-      clearTimeout(bearTimer);
-      clearTimeout(bearMoveTimer);
-      clearTimeout(bearStealTimer);
-    }else{
-      scheduleBear();
-    }
-  };
-  bearThief.dataset.quietWrapped="1";
-}
-
-window.addEventListener("resize",()=>{
-  if(!bearBusy)return;
-  const x=parseFloat(bearThief.dataset.x||0);
-  const y=parseFloat(bearThief.dataset.y||70);
-  if(x<0 || x>window.innerWidth){
-    bearThief.style.left=`${x}px`;
-  }else{
-    bearThief.style.left=`${Math.max(8,Math.min(x,window.innerWidth-86))}px`;
   }
-  bearThief.style.top=`${Math.max(70,Math.min(y,window.innerHeight-100))}px`;
-});
+);
 
-setTimeout(scheduleBear,1800);
+
+/* =========================
+   START BEAR
+========================= */
+
+setTimeout(
+  scheduleBear,
+  1800
+);
 
 </script>
 
