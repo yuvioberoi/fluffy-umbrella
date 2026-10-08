@@ -2929,38 +2929,47 @@ window.addEventListener("load",()=>{
 
 function createSunflowerRain(){
 
-  for(let i=0;i<22;i++){
+  const candies = [
+    "🌻",
+    "🍬",
+    "🍭",
+  ];
+
+  for(let i=0;i<35;i++){
 
     setTimeout(()=>{
 
-      const sunflower =
+      const candy =
         document.createElement("div");
 
-      sunflower.className =
+      candy.className =
         "sunflower-rain";
 
-      sunflower.textContent="🌻";
+      candy.textContent =
+        candies[
+          Math.floor(
+            Math.random()*candies.length
+          )
+        ];
 
-      sunflower.style.left =
+      candy.style.left =
         Math.random()*100 + "vw";
 
-      sunflower.style.fontSize =
-        (20 + Math.random()*18) + "px";
+      candy.style.fontSize =
+        (18 + Math.random()*20) + "px";
 
-      sunflower.style.animationDuration =
-        (3.5 + Math.random()*3) + "s";
+      candy.style.animationDuration =
+        (3 + Math.random()*3) + "s";
 
-      document.body.appendChild(
-        sunflower
-      );
+      document.body.appendChild(candy);
 
       setTimeout(()=>{
 
-        sunflower.remove();
+        candy.remove();
 
-      },7000);
+      },6500);
 
-    },i*120);
+    },i*90);
 
   }
 
