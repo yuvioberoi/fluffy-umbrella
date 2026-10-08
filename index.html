@@ -982,9 +982,16 @@ backdrop-filter:blur(18px);
   position:absolute;
 
   border:0;
-  background:transparent;
+  outline:none;
+  background:transparent !important;
+  box-shadow:none;
+  padding:0;
+  margin:0;
 
   font-size:30px;
+
+  appearance:none;
+  -webkit-appearance:none;
 
   animation:gameHeartFloat 2s ease-in-out infinite;
 }
@@ -3507,6 +3514,8 @@ function runHeartGame(){
 
     const heart =
       document.createElement("button");
+
+heart.className = "game-heart";
     
     heart.textContent =
       Math.random()>.5
