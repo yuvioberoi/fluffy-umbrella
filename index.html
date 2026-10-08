@@ -1946,8 +1946,10 @@ body.quiet-mode .scroll-cue{
 
 /* Fix Catch Hearts game heart buttons */
 
-#heartGameArea button{
+#gameArea .game-heart{
+  position:absolute !important;
   background:transparent !important;
+  background-image:none !important;
   border:none !important;
   outline:none !important;
   box-shadow:none !important;
@@ -1959,6 +1961,8 @@ body.quiet-mode .scroll-cue{
   height:auto !important;
   border-radius:0 !important;
   color:inherit !important;
+  appearance:none !important;
+  -webkit-appearance:none !important;
   cursor:pointer;
 }
 
