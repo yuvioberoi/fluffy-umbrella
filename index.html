@@ -1907,6 +1907,43 @@ body.quiet-mode .scroll-cue{
   }
 }
 
+
+/* =========================
+   SUNFLOWER RAIN
+========================= */
+
+.sunflower-rain{
+  position:fixed;
+  top:-60px;
+  left:0;
+  pointer-events:none;
+  z-index:9999;
+  font-size:28px;
+  animation:sunflowerFall linear forwards;
+}
+
+@keyframes sunflowerFall{
+
+  0%{
+    transform:translateY(-60px) rotate(0deg);
+    opacity:0;
+  }
+
+  10%{
+    opacity:1;
+  }
+
+  90%{
+    opacity:1;
+  }
+
+  100%{
+    transform:translateY(110vh) rotate(360deg);
+    opacity:0;
+  }
+
+}
+
 </style>
 </head>
 
@@ -2293,34 +2330,6 @@ body.quiet-mode .scroll-cue{
 <section id="magic">
 
   <div class="wrap">
-
-    <div class="title">
-
-      <h2>Magic button ✨</h2>
-
-      <p>
-        Press it. Something tiny happens.
-      </p>
-
-    </div>
-
-    <div class="magic-box">
-
-      <div
-        class="magic-orb"
-        onclick="magic()"
-      ></div>
-
-      <button
-        class="btn blue"
-        onclick="magic()"
-      >
-        Make magic ✨
-      </button>
-
-    </div>
-
-  </div>
 
 </section>
 
@@ -2908,6 +2917,55 @@ window.addEventListener("load",()=>{
 
 
 /* =========================
+   SUNFLOWER RAIN
+========================= */
+
+function createSunflowerRain(){
+
+  for(let i=0;i<22;i++){
+
+    setTimeout(()=>{
+
+      const sunflower =
+        document.createElement("div");
+
+      sunflower.className =
+        "sunflower-rain";
+
+      sunflower.textContent="🌻";
+
+      sunflower.style.left =
+        Math.random()*100 + "vw";
+
+      sunflower.style.fontSize =
+        (20 + Math.random()*18) + "px";
+
+      sunflower.style.animationDuration =
+        (3.5 + Math.random()*3) + "s";
+
+      document.body.appendChild(
+        sunflower
+      );
+
+      setTimeout(()=>{
+
+        sunflower.remove();
+
+      },7000);
+
+    },i*120);
+
+  }
+
+}
+
+window.addEventListener(
+  "load",
+  createSunflowerRain
+);
+
+
+/* =========================
    CUSTOM CONTENT
 ========================= */
 
@@ -3449,10 +3507,7 @@ function runHeartGame(){
 
     const heart =
       document.createElement("button");
-
-    heart.className=
-      "game-heart";
-
+    
     heart.textContent =
       Math.random()>.5
         ? "❤️"
@@ -4035,6 +4090,16 @@ function lockSecretRoom(){
     .classList.remove("show");
 
   document
+    .querySelector(
+      ".secret-lock-icon"
+    )
+    .classList.remove("unlocked");
+
+  localStorage.removeItem(
+    "junhii_secret_unlocked"
+  );
+
+  document
     .getElementById(
       "secretStatus"
     )
@@ -4143,46 +4208,9 @@ document.addEventListener(
 
 renderSecretRoom();
 
-if(
-  localStorage.getItem(
-    "junhii_secret_unlocked"
-  )==="1"
-){
-
-  document
-    .getElementById(
-      "secretRoomTitle"
-    )
-    .textContent =
-      CUSTOM.secretRoomTitle;
-
-  document
-    .getElementById(
-      "secretRoomMessage"
-    )
-    .textContent =
-      CUSTOM.secretRoomMessage;
-
-  document
-    .getElementById(
-      "secretUnlocked"
-    )
-    .classList.add("show");
-
-  document
-    .querySelector(
-      ".secret-lock-icon"
-    )
-    .classList.add("unlocked");
-
-  document
-    .getElementById(
-      "secretStatus"
-    )
-    .textContent =
-      "Secret Room saved on this browser. 🔓";
-
-}
+localStorage.removeItem(
+  "junhii_secret_unlocked"
+);
   
 /* =========================
    MUSIC
